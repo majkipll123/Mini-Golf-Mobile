@@ -1,13 +1,13 @@
-    // SDL2 Hello, World!
-// This should display a white screen for 2 seconds
+
+
 // compile with: clang++ main.cpp -o Mini_Golf_Mobile -lSDL2
 // run with: ./Mini_Golf_Mobile
 #include <SDL2/SDL.h>
 #include <stdio.h>
 
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_WIDTH 1080
+#define SCREEN_HEIGHT 940
 
 
 
