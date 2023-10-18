@@ -1,6 +1,6 @@
 
 
-// compile with: clang++ main.cpp -o Mini_Golf_Mobile -lSDL2
+// compile with: g++ main.cpp -o Mini_Golf_Mobile -lSDL2
 // run with: ./Mini_Golf_Mobile
 #include <SDL2/SDL.h>
 #include <stdio.h>
