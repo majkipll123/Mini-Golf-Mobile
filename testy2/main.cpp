@@ -1,6 +1,9 @@
 #include <SDL2/SDL.h>
-#include <stdio.h>
-#include "Ball.cpp"
+#include <SDL2/SDL2_gfxPrimitives.h>
+#include <cmath>
+#include "Ball.h" // Poprawne załączenie pliku nagłówkowego
+
+const float FRICTION = 0.95;
 
 #define SCREEN_WIDTH 1080
 #define SCREEN_HEIGHT 940
@@ -28,6 +31,9 @@ int main(int argc, char* args[]) {
     }
 
     Ball ball(20, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+    bool isDragging = false;
+    int prevMouseX = 0;
+    int prevMouseY = 0;
 
     bool quit = false;
     while (!quit) {
@@ -35,6 +41,28 @@ int main(int argc, char* args[]) {
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
                 quit = true;
+            }
+            else if (e.type == SDL_MOUSEMOTION) {
+                if (isDragging) {
+                    int mouseX = e.motion.x;
+                    int mouseY = e.motion.y;
+                    int deltaX = mouseX - prevMouseX;
+                    int deltaY = mouseY - prevMouseY;
+                    ball.setAcceleration(deltaX, deltaY); // Ustaw przyspieszenie na podstawie odległości
+                }
+            }
+            else if (e.type == SDL_MOUSEBUTTONDOWN) {
+                if (e.button.button == SDL_BUTTON_LEFT) {
+                    isDragging = true;
+                    prevMouseX = e.button.x;
+                    prevMouseY = e.button.y;
+                }
+            }
+            else if (e.type == SDL_MOUSEBUTTONUP) {
+                if (e.button.button == SDL_BUTTON_LEFT) {
+                    isDragging = false;
+                    ball.setAcceleration(0, 0); // Zatrzymujemy piłkę po puszczeniu myszy
+                }
             }
         }
 
