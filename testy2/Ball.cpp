@@ -2,16 +2,21 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <cmath>
 
+#include "Ball.h"
+
 const float FRICTION = 0.95;
+
+
 
 Ball::Ball(int radius, int startX, int startY) : radius(radius), x(startX), y(startY), xVelocity(0), yVelocity(0), xAcceleration(0), yAcceleration(0) {
 }
 
 void Ball::move() {
+
     xVelocity += xAcceleration; // Dodaj przyspieszenie do prędkości
     yVelocity += yAcceleration;
-    x += xVelocity;
-    y += yVelocity;
+    x -= xVelocity;
+    y -= yVelocity;
 }
 
 void Ball::handleCollision(int screenWidth, int screenHeight) {

@@ -48,7 +48,7 @@ int main(int argc, char* args[]) {
                     int mouseY = e.motion.y;
                     int deltaX = mouseX - prevMouseX;
                     int deltaY = mouseY - prevMouseY;
-                    ball.setAcceleration(deltaX, deltaY); // Ustaw przyspieszenie na podstawie odległości
+                    ball.setAcceleration(0, 0); // Ustaw przyspieszenie na podstawie odległości
                 }
             }
             else if (e.type == SDL_MOUSEBUTTONDOWN) {
@@ -61,7 +61,7 @@ int main(int argc, char* args[]) {
             else if (e.type == SDL_MOUSEBUTTONUP) {
                 if (e.button.button == SDL_BUTTON_LEFT) {
                     isDragging = false;
-                    ball.setAcceleration(0, 0); // Zatrzymujemy piłkę po puszczeniu myszy
+                    ball.setAcceleration(1, 1); // Zatrzymujemy piłkę po puszczeniu myszy
                 }
             }
         }

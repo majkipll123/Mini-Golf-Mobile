@@ -1,1 +1,2 @@
 `sdl2-config --cflags --libs` -lSDL2 -lSDL2_mixer -lSDL2_image -lSDL2_ttf
+g++ main.cpp Ball.cpp -o Mini_Golf_Mobile -lSDL2 -lSDL2_gfx
