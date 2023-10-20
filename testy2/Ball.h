@@ -10,8 +10,8 @@ public:
     void move();
     void handleCollision(int screenWidth, int screenHeight);
     void draw(SDL_Renderer* renderer);
-    void setPosition(int newX, int newY);
-    void setAcceleration(int newXAcceleration, int newYAcceleration);
+    void setPosition(float newX, float newY);
+    void setAcceleration(float newXAcceleration, float newYAcceleration);
     void applyFriction();
 
 private:

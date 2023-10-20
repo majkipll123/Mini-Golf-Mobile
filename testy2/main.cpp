@@ -41,7 +41,7 @@ int main(int argc, char* args[]) {
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
                 quit = true;
-            }
+            } // tutaj zablokowac uzytkownikowi mozliwosc uderzania kilka razy z rzedu
             else if (e.type == SDL_MOUSEMOTION) {
                 if (isDragging) {
                     int mouseX = e.motion.x;
@@ -62,6 +62,7 @@ int main(int argc, char* args[]) {
                 if (e.button.button == SDL_BUTTON_LEFT) {
                     isDragging = false;
                     ball.setAcceleration(1, 1); // Zatrzymujemy piłkę po puszczeniu myszy
+                    
                 }
             }
         }
