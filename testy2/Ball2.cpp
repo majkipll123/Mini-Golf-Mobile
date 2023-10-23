@@ -4,7 +4,7 @@
 
 #include "Ball.h"
 
-const float FRICTION = 0.75; // Increase friction for faster deceleration
+const float FRICTION = 0.99; // Increase friction for faster deceleration
 const float MIN_VELOCITY = 0.01; // Minimum velocity before stopping
 
 Ball::Ball(int radius, int startX, int startY) : radius(radius), x(startX), y(startY), xVelocity(0), yVelocity(0), xAcceleration(0), yAcceleration(0) {
@@ -16,10 +16,8 @@ void Ball::move() {
     yVelocity += yAcceleration;
 
     // Apply friction
-    xAcceleration *= FRICTION;
-    yAcceleration *= FRICTION;
-
-
+    xVelocity *= FRICTION;
+    yVelocity *= FRICTION;
 
     // Stop the ball if its velocity is close to zero
     if (std::abs(xVelocity) < MIN_VELOCITY) {
@@ -61,13 +59,7 @@ void Ball::setAcceleration(float newXAcceleration, float newYAcceleration) {
     yAcceleration = newYAcceleration;
 }
 
-void Ball::setVelocity(float newXVelocity, float newYVelocity) {
-    xVelocity = newXVelocity;
-    yVelocity = newYVelocity;
-}
-
 void Ball::applyFriction() {
-    // Move friction application to the beginning
     xVelocity *= FRICTION;
     yVelocity *= FRICTION;
 }

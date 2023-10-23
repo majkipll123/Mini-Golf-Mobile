@@ -1,8 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <cmath>
-#include "Ball.h" // Poprawne załączenie pliku nagłówkowego
-
+#include "Ball.h" 
 const float FRICTION = 0.95;
 
 #define SCREEN_WIDTH 1080
@@ -61,13 +60,15 @@ int main(int argc, char* args[]) {
             else if (e.type == SDL_MOUSEBUTTONUP) {
                 if (e.button.button == SDL_BUTTON_LEFT) {
                     isDragging = false;
-                    ball.setAcceleration(1, 1); // Zatrzymujemy piłkę po puszczeniu myszy
+                    ball.setVelocity(0.5, 0.5); 
+                    ball.setAcceleration(0.1, 0.1);
                     
                 }
             }
         }
 
         ball.move();
+        
         ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT);
 
         SDL_SetRenderDrawColor(renderer, 0, 0xFF, 0, 0xFF);
