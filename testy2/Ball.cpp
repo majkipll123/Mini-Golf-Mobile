@@ -4,7 +4,7 @@
 
 #include "Ball.h"
 
-const float FRICTION = 0.75; // Increase friction for faster deceleration
+const float FRICTION = 0.95; // I dont understand why the friction doesnt work lolz
 const float MIN_VELOCITY = 0.01; // Minimum velocity before stopping
 
 Ball::Ball(int radius, int startX, int startY) : radius(radius), x(startX), y(startY), xVelocity(0), yVelocity(0), xAcceleration(0), yAcceleration(0) {
