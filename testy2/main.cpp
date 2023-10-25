@@ -41,15 +41,16 @@ int main(int argc, char* args[]) {
             if (e.type == SDL_QUIT) {
                 quit = true;
             } // tutaj zablokowac uzytkownikowi mozliwosc uderzania kilka razy z rzedu
-            else if (e.type == SDL_MOUSEMOTION) {
-                if (isDragging) {
-                    int mouseX = e.motion.x;
-                    int mouseY = e.motion.y;
-                    int deltaX = mouseX - prevMouseX;
-                    int deltaY = mouseY - prevMouseY;
-                    ball.setAcceleration(0, 0); // Ustaw przyspieszenie na podstawie odległości
-                }
-            }
+            else if (e.type == SDL_MOUSEBUTTONDOWN) {
+                if (e.button.button == SDL_BUTTON_LEFT) {
+                    isDragging = true;
+                    prevMouseX = e.button.x;
+                    prevMouseY = e.button.y;
+            } else if (e.button.button == SDL_BUTTON_RIGHT) {
+           
+            ball.stop();
+        }
+    }
             else if (e.type == SDL_MOUSEBUTTONDOWN) {
                 if (e.button.button == SDL_BUTTON_LEFT) {
                     isDragging = true;
@@ -60,11 +61,17 @@ int main(int argc, char* args[]) {
             else if (e.type == SDL_MOUSEBUTTONUP) {
                 if (e.button.button == SDL_BUTTON_LEFT) {
                     isDragging = false;
-                    ball.setVelocity(0.5, 0.5); 
-                    ball.setAcceleration(0.1, 0.1);
+                    ball.setVelocity(2, 2, 0); 
+                    ball.setAcceleration(0.1, 0.1, 0);
                     
                 }
             }
+            //else if (e.type ){
+
+                
+            //}
+           
+            
         }
 
         ball.move();
@@ -75,7 +82,7 @@ int main(int argc, char* args[]) {
         SDL_RenderClear(renderer);
 
         ball.draw(renderer);
-
+        
         SDL_RenderPresent(renderer);
     }
 

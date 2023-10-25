@@ -8,11 +8,12 @@ class Ball {
 public:
     Ball(int radius, int startX, int startY);
     void move();
+    void stop();
     void handleCollision(float screenWidth, float screenHeight);
     void draw(SDL_Renderer* renderer);
     void setPosition(float newX, float newY);
-    void setAcceleration(float newXAcceleration, float newYAcceleration);
-    void setVelocity(float newXVelocity, float newYVelocity);
+    void setAcceleration(float newXAcceleration, float newYAcceleration, float newZAcceleration);
+    void setVelocity(float newXVelocity, float newYVelocity, float);
     void applyFriction();
 
 private:
@@ -21,8 +22,10 @@ private:
     int y;
     float xVelocity;
     float yVelocity;
+    float zVelocity;
     float xAcceleration;
     float yAcceleration;
+    float zAcceleration;
 };
 
 #endif
