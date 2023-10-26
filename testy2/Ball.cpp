@@ -13,8 +13,8 @@ Ball::Ball(int radius, int startX, int startY) : radius(radius), x(startX), y(st
 
 void Ball::move() {
 
-    //xVelocity += xAcceleration;
-    //yVelocity += yAcceleration;
+    //xVelocity -= xAcceleration;
+    //yVelocity -= yAcceleration;
     
 
     if(std::abs(xVelocity)< MIN_VELOCITY || std::abs(yVelocity) > MIN_VELOCITY) {
@@ -30,8 +30,8 @@ void Ball::move() {
     
 
 
-    x += xVelocity;
-    y += yVelocity;
+    x -= xVelocity;
+    y -= yVelocity;
     std::cout<<x<<"\n";
     std::cout<<y<<"\n";
     std::cout<<xAcceleration<<" xaccel \n";

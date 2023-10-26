@@ -5,8 +5,8 @@
 #include "Ball.h" 
 const float FRICTION = 0.95;
 
-#define SCREEN_WIDTH 1080
-#define SCREEN_HEIGHT 940
+#define SCREEN_WIDTH 500
+#define SCREEN_HEIGHT 900
 
 int main(int argc, char* args[]) {
     SDL_Window* window = NULL;
