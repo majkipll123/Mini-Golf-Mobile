@@ -32,12 +32,15 @@ int main(int argc, char* args[]) {
 
     Ball ball(20, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
     bool isDragging = false;
-    int prevMouseX = 0;
-    int prevMouseY = 0;
+    float prevMouseX = 0;
+    float prevMouseY = 0;
     float xAcceleration = 0.0;
     float yAcceleration = 0.0;
     float deltaX = 0.0;
     float deltaY = 0.0;
+    float mouseX = 0.0;
+    float mouseY = 0.0;
+    bool ready;
     bool quit = false;
     while (!quit) {
         SDL_Event e;
@@ -48,12 +51,10 @@ int main(int argc, char* args[]) {
             else if (e.type == SDL_MOUSEBUTTONDOWN) {
                 if (e.button.button == SDL_BUTTON_LEFT) {
                     isDragging = true;
-                    int mouseX = e.motion.x;
-                    int mouseY = e.motion.y;
-                    deltaX = mouseX - prevMouseX;
-                    deltaY = mouseY - prevMouseY;
-                    std::cout<<deltaX<<" deltaX \n";
-                    std::cout<<deltaY<<" deltaY \n";
+
+                    prevMouseX = e.motion.x;
+                    prevMouseY = e.motion.y;
+
                     
                 }
 
@@ -61,6 +62,12 @@ int main(int argc, char* args[]) {
             else if (e.type == SDL_MOUSEBUTTONUP) {
                 if (e.button.button == SDL_BUTTON_LEFT) {
                     isDragging = false;
+                    mouseX = e.motion.x;
+                    mouseY = e.motion.y;
+                    deltaX = mouseX - prevMouseX;
+                    deltaY = mouseY - prevMouseY;
+                    std::cout<<deltaX<<" deltaX \n";
+                    std::cout<<deltaY<<" deltaY \n";
                     float xVelocity = static_cast<float>(deltaX) / SCREEN_WIDTH;
                     float yVelocity = static_cast<float>(deltaY) / SCREEN_HEIGHT;
                     ball.setAcceleration(xVelocity, yVelocity, 0.0);

@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Ball.h"
 
-const float FRICTION = 0.9975; // I dont understand why the friction doesnt work lolz
+const float FRICTION = 0.9989; // I dont understand why the friction doesnt work lolz
 const float MIN_VELOCITY = 0.001; // Minimum velocity before stopping
 
 Ball::Ball(int radius, int startX, int startY) : radius(radius), x(startX), y(startY), xVelocity(0), yVelocity(0), zVelocity(0), xAcceleration(0), yAcceleration(0), zAcceleration(0){
@@ -17,45 +17,49 @@ void Ball::move() {
     //yVelocity -= yAcceleration;
     
 
-    if(std::abs(xVelocity)< MIN_VELOCITY || std::abs(yVelocity) > MIN_VELOCITY) {
+    if(std::abs(xVelocity)> MIN_VELOCITY || std::abs(yVelocity) > MIN_VELOCITY) {
         xVelocity = xVelocity* FRICTION;
         yVelocity = yVelocity* FRICTION;
-
+        //isready(false);
         //std::cout<<"go \n";
     }
     else {
         stop();
-        std::cout<<"stop \n";
+        //std::cout<<"stop \n";
+        //tutaj dodac funcje ktora pozwala dodac przyspieszenie 
+        //isready(true);
     };
     
 
 
     x -= xVelocity;
     y -= yVelocity;
+    /*
     std::cout<<x<<"\n";
     std::cout<<y<<"\n";
     std::cout<<xAcceleration<<" xaccel \n";
     std::cout<<yAcceleration<<" yaccel \n";
     std::cout<<xVelocity<<" xvelaccel \n";
     std::cout<<yVelocity<<" yvelaccel \n"; //symulowac dokladne obicia za pomoca przewidywania czasowego git 
+    */
 }
 
 void Ball::handleCollision(int screenWidth, int screenHeight) {
    if (x - radius < 0) {
         x = radius;
-        xVelocity = -xVelocity;
+        xVelocity = -xVelocity*0.75;
     }
     else if (x + radius > screenWidth) {
         x = screenWidth - radius;
-        xVelocity = -xVelocity;
+        xVelocity = -xVelocity*0.75;
     }
     if (y - radius < 0) {
         y = radius;
-        yVelocity = -yVelocity;
+        yVelocity = -yVelocity*0.75;
     }
     else if (y + radius > screenHeight) {
         y = screenHeight - radius;
-        yVelocity = -yVelocity;
+        yVelocity = -yVelocity*0.75;
     }
 }
 void Ball::stop() {
@@ -89,4 +93,9 @@ void Ball::applyFriction() {
     xVelocity *= FRICTION;
     yVelocity *= FRICTION;
 }
+/*
+bool Ball::isready(bool isready){
+    ready= isready
+    
+}*/
 
