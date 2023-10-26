@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <cmath>
+#include <iostream>
 #include "Ball.h" 
 const float FRICTION = 0.95;
 
@@ -33,7 +34,10 @@ int main(int argc, char* args[]) {
     bool isDragging = false;
     int prevMouseX = 0;
     int prevMouseY = 0;
-
+    float xAcceleration = 0.0;
+    float yAcceleration = 0.0;
+    float deltaX = 0.0;
+    float deltaY = 0.0;
     bool quit = false;
     while (!quit) {
         SDL_Event e;
@@ -44,26 +48,28 @@ int main(int argc, char* args[]) {
             else if (e.type == SDL_MOUSEBUTTONDOWN) {
                 if (e.button.button == SDL_BUTTON_LEFT) {
                     isDragging = true;
-                    prevMouseX = e.button.x;
-                    prevMouseY = e.button.y;
-            } else if (e.button.button == SDL_BUTTON_RIGHT) {
-           
-            ball.stop();
-        }
-    }
-            else if (e.type == SDL_MOUSEBUTTONDOWN) {
-                if (e.button.button == SDL_BUTTON_LEFT) {
-                    isDragging = true;
-                    prevMouseX = e.button.x;
-                    prevMouseY = e.button.y;
+                    int mouseX = e.motion.x;
+                    int mouseY = e.motion.y;
+                    deltaX = mouseX - prevMouseX;
+                    deltaY = mouseY - prevMouseY;
+                    std::cout<<deltaX<<" deltaX \n";
+                    std::cout<<deltaY<<" deltaY \n";
+                    
                 }
+
             }
             else if (e.type == SDL_MOUSEBUTTONUP) {
                 if (e.button.button == SDL_BUTTON_LEFT) {
                     isDragging = false;
-                    ball.setVelocity(2, 2, 0); 
-                    ball.setAcceleration(0.1, 0.1, 0);
+                    float xVelocity = static_cast<float>(deltaX) / SCREEN_WIDTH;
+                    float yVelocity = static_cast<float>(deltaY) / SCREEN_HEIGHT;
+                    ball.setAcceleration(xVelocity, yVelocity, 0.0);
+                    ball.setVelocity(xVelocity, yVelocity, 0.0);
                     
+                    //std::cout<<deltaX<<" deltaX \n";
+                    //std::cout<<deltaY<<" deltaY \n";   
+                    //std::cout<<xVelocity<<" xaccel \n";
+                    //std::cout<<yVelocity<<" yaccel \n";
                 }
             }
             //else if (e.type ){
@@ -73,10 +79,9 @@ int main(int argc, char* args[]) {
            
             
         }
-
+        ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT);
         ball.move();
         
-        ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT);
 
         SDL_SetRenderDrawColor(renderer, 0, 0xFF, 0, 0xFF);
         SDL_RenderClear(renderer);

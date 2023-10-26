@@ -9,7 +9,7 @@ public:
     Ball(int radius, int startX, int startY);
     void move();
     void stop();
-    void handleCollision(float screenWidth, float screenHeight);
+    void handleCollision(int screenWidth, int screenHeight);
     void draw(SDL_Renderer* renderer);
     void setPosition(float newX, float newY);
     void setAcceleration(float newXAcceleration, float newYAcceleration, float newZAcceleration);
@@ -18,8 +18,8 @@ public:
 
 private:
     int radius;
-    int x;
-    int y;
+    float x;
+    float y;
     float xVelocity;
     float yVelocity;
     float zVelocity;

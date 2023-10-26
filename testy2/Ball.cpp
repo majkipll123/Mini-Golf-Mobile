@@ -1,11 +1,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <cmath>
+ 
 #include <iostream>
 #include "Ball.h"
 
 const float FRICTION = 0.9975; // I dont understand why the friction doesnt work lolz
-const float MIN_VELOCITY = 0.1; // Minimum velocity before stopping
+const float MIN_VELOCITY = 0.001; // Minimum velocity before stopping
 
 Ball::Ball(int radius, int startX, int startY) : radius(radius), x(startX), y(startY), xVelocity(0), yVelocity(0), zVelocity(0), xAcceleration(0), yAcceleration(0), zAcceleration(0){
 }
@@ -14,43 +15,47 @@ void Ball::move() {
 
     //xVelocity += xAcceleration;
     //yVelocity += yAcceleration;
+    
 
-    xVelocity = xVelocity* FRICTION;
-    yVelocity = yVelocity* FRICTION;
+    if(std::abs(xVelocity)< MIN_VELOCITY || std::abs(yVelocity) > MIN_VELOCITY) {
+        xVelocity = xVelocity* FRICTION;
+        yVelocity = yVelocity* FRICTION;
 
-    if (std::abs(xVelocity) < MIN_VELOCITY) {
-        stop();
+        //std::cout<<"go \n";
     }
-
-    if (std::abs(yVelocity) < MIN_VELOCITY) {
+    else {
         stop();
-    }
+        std::cout<<"stop \n";
+    };
+    
+
 
     x += xVelocity;
     y += yVelocity;
-
-
-    //std::cout<<xAcceleration<<" xaccel \n";
-    //std::cout<<yAcceleration<<" yaccel \n";
-    //std::cout<<xVelocity<<" xvelaccel \n";
-    //std::cout<<yVelocity<<" yvelaccel \n"; symulowac dokladne obicia za pomoca przewidywania czasowego 
+    std::cout<<x<<"\n";
+    std::cout<<y<<"\n";
+    std::cout<<xAcceleration<<" xaccel \n";
+    std::cout<<yAcceleration<<" yaccel \n";
+    std::cout<<xVelocity<<" xvelaccel \n";
+    std::cout<<yVelocity<<" yvelaccel \n"; //symulowac dokladne obicia za pomoca przewidywania czasowego git 
 }
 
-void Ball::handleCollision(float screenWidth, float screenHeight) {
-    if (x - radius <= 200 || x + radius > screenWidth) {
-
+void Ball::handleCollision(int screenWidth, int screenHeight) {
+   if (x - radius < 0) {
+        x = radius;
         xVelocity = -xVelocity;
-        xAcceleration = -xAcceleration;
-        
-
-        //std::cout<<xAcceleration<<" xaccel \n";
     }
-
-    if (y - radius <= 200 || y + radius > screenHeight) {
-
+    else if (x + radius > screenWidth) {
+        x = screenWidth - radius;
+        xVelocity = -xVelocity;
+    }
+    if (y - radius < 0) {
+        y = radius;
         yVelocity = -yVelocity;
-        yAcceleration = -yAcceleration;
-        
+    }
+    else if (y + radius > screenHeight) {
+        y = screenHeight - radius;
+        yVelocity = -yVelocity;
     }
 }
 void Ball::stop() {
@@ -84,3 +89,4 @@ void Ball::applyFriction() {
     xVelocity *= FRICTION;
     yVelocity *= FRICTION;
 }
+
