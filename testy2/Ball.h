@@ -15,11 +15,18 @@ public:
     void setAcceleration(float newXAcceleration, float newYAcceleration, float newZAcceleration);
     void setVelocity(float newXVelocity, float newYVelocity, float);
     void applyFriction();
-   // bool isready(bool ready);
+    
+    bool isready() const {
+        return ready;
+    }
+
+    void setready(bool value) {
+        ready = value;
+    }
 
 private:
     int radius;
-    //bool ready;
+    bool ready;
     float x;
     float y;
     float xVelocity;

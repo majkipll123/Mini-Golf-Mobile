@@ -5,8 +5,8 @@
 #include <iostream>
 #include "Ball.h"
 
-const float FRICTION = 0.9989; // I dont understand why the friction doesnt work lolz
-const float MIN_VELOCITY = 0.001; // Minimum velocity before stopping
+const float FRICTION = 0.9997; // 0.9989  albo 0.9997 optymalna wartosc tarcia
+const float MIN_VELOCITY = 0.001; //  optymalna wartosc 0.001 minimalna wartosc przed zatrzymaniem
 
 Ball::Ball(int radius, int startX, int startY) : radius(radius), x(startX), y(startY), xVelocity(0), yVelocity(0), zVelocity(0), xAcceleration(0), yAcceleration(0), zAcceleration(0){
 }
@@ -20,14 +20,13 @@ void Ball::move() {
     if(std::abs(xVelocity)> MIN_VELOCITY || std::abs(yVelocity) > MIN_VELOCITY) {
         xVelocity = xVelocity* FRICTION;
         yVelocity = yVelocity* FRICTION;
-        //isready(false);
+        setready(false);
         //std::cout<<"go \n";
     }
     else {
         stop();
         //std::cout<<"stop \n";
-        //tutaj dodac funcje ktora pozwala dodac przyspieszenie 
-        //isready(true);
+        setready(true);
     };
     
 
@@ -93,9 +92,5 @@ void Ball::applyFriction() {
     xVelocity *= FRICTION;
     yVelocity *= FRICTION;
 }
-/*
-bool Ball::isready(bool isready){
-    ready= isready
-    
-}*/
+
 

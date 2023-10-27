@@ -40,7 +40,7 @@ int main(int argc, char* args[]) {
     float deltaY = 0.0;
     float mouseX = 0.0;
     float mouseY = 0.0;
-    bool ready;
+    bool ready = true;
     bool quit = false;
     while (!quit) {
         SDL_Event e;
@@ -54,12 +54,12 @@ int main(int argc, char* args[]) {
 
                     prevMouseX = e.motion.x;
                     prevMouseY = e.motion.y;
-
+                   
                     
                 }
 
             }
-            else if (e.type == SDL_MOUSEBUTTONUP) {
+            else if (e.type == SDL_MOUSEBUTTONUP && ball.isready()) {
                 if (e.button.button == SDL_BUTTON_LEFT) {
                     isDragging = false;
                     mouseX = e.motion.x;
