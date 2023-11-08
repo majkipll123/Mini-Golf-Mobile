@@ -87,7 +87,7 @@ int main(int argc, char* args[]) {
     }
     Hole hole;
     hole.x = SCREEN_WIDTH/2 ;/* X-coordinate of the hole */;
-    hole.y = SCREEN_WIDTH/5 ;/* Y-coordinate of the hole */;
+    hole.y = SCREEN_WIDTH/5+75 ;/* Y-coordinate of the hole */;
     hole.radius = 15 ;
 
     Ball ball(20, SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50);
