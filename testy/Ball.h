@@ -23,9 +23,17 @@ public:
     void setready(bool value) {
         ready = value;
     }
+    int getHitCount() const;
+
+    void increaseHitCount();
+    
+    int getX() const { return x; }
+    int getY() const { return y; }
+    int getRadius() const { return radius; }
 
 private:
     int radius;
+    int hitCount;
     bool ready;
     float x;
     float y;

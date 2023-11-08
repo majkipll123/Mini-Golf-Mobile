@@ -8,7 +8,7 @@
 const float FRICTION = 0.9997; // 0.9989  albo 0.9997 optymalna wartosc tarcia
 const float MIN_VELOCITY = 0.001; //  optymalna wartosc 0.001 minimalna wartosc przed zatrzymaniem
 
-Ball::Ball(int radius, int startX, int startY) : radius(radius), x(startX), y(startY), xVelocity(0), yVelocity(0), zVelocity(0), xAcceleration(0), yAcceleration(0), zAcceleration(0){
+Ball::Ball(int radius, int startX, int startY) : radius(radius), x(startX), y(startY), xVelocity(0), yVelocity(0), zVelocity(0), xAcceleration(0), yAcceleration(0), zAcceleration(0), hitCount(0){
 }
 
 void Ball::move() {
@@ -27,6 +27,8 @@ void Ball::move() {
         stop();
         //std::cout<<"stop \n";
         setready(true);
+        
+        
     };
     
 
@@ -66,8 +68,9 @@ void Ball::stop() {
     yVelocity = 0;
     xAcceleration = 0;
     yAcceleration = 0;
-   
+    
 }
+
 void Ball::draw(SDL_Renderer* renderer) {
     filledCircleRGBA(renderer, x, y, radius, 134, 134, 134, 198);
 }
@@ -87,10 +90,18 @@ void Ball::setVelocity(float newXVelocity, float newYVelocity, float newZVelocit
     yVelocity = newYVelocity;
 }
 
+
+
 void Ball::applyFriction() {
     // Move friction application to the beginning
     xVelocity *= FRICTION;
     yVelocity *= FRICTION;
 }
 
+int Ball::getHitCount() const {
+    return hitCount;
+}
 
+void Ball::increaseHitCount() {
+    hitCount++;
+}
