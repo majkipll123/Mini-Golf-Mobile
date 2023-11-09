@@ -12,7 +12,10 @@ const float FRICTION = 0.95;
 
 enum GameState {
     MENU,
+    CHOOSE_LVL,
     LEVEL_1,
+    LEVEL_2,
+    LEVEL_3,
     PAUSE,  
     FINAL_SCREEN,// New game state for the pause screen
 };
@@ -72,14 +75,16 @@ int main(int argc, char* args[]) {
     const int buttonHeight = 75;
     const int screenWidth = SCREEN_WIDTH;
     Button buttons[3];
+    Button choose_lvl[3];
+
     for(int i = 0; i < 3; i++) {
         buttons[i].rect = {(screenWidth - buttonWidth)/2, i*100+100, buttonWidth, buttonHeight};
         //name the buttons
         if ( i==0 )
-            buttons[0].textSurface = TTF_RenderText_Solid(font, "Graj", {255, 255, 255});
-        if ( i==1 )
+            buttons[0].textSurface = TTF_RenderText_Solid(font, "Practise offline", {255, 255, 255});
+        else if ( i==1 )
             buttons[1].textSurface = TTF_RenderText_Solid(font, "Opcje", {255, 255, 255});
-        if ( i==2 )
+        else if ( i==2 )
             buttons[2].textSurface = TTF_RenderText_Solid(font, "Wyjdz", {255, 255, 255});
         
         buttons[i].textTexture = SDL_CreateTextureFromSurface(renderer, buttons[i].textSurface);
@@ -165,7 +170,7 @@ int main(int argc, char* args[]) {
                             // Handle button click
                             if (i == 0) {
                                 // Transition to "1st level"
-                                gameState = LEVEL_1;
+                                gameState = CHOOSE_LVL;
                                 // Initialize the game state for level 1 here
                             }
                             if (i == 2) {
@@ -279,6 +284,35 @@ int main(int argc, char* args[]) {
         
 
         
+        }
+
+        else if (gameState == CHOOSE_LVL) {
+            // choose_lvl 
+        for(int i = 0; i < 3; i++) {
+            choose_lvl[i].rect = {(screenWidth - buttonWidth)/2, i*100+100, buttonWidth, buttonHeight};
+            //name the buttons
+            if ( i==0 )
+                choose_lvl[0].textSurface = TTF_RenderText_Solid(font, "LEVEL ONE", {255, 255, 255});
+            else if ( i==1 )
+                choose_lvl[1].textSurface = TTF_RenderText_Solid(font, "LEVEL TWO", {255, 255, 255});
+            else if ( i==2 )
+                choose_lvl[2].textSurface = TTF_RenderText_Solid(font, "LEVEL THREE", {255, 255, 255});
+            
+            choose_lvl[i].textTexture = SDL_CreateTextureFromSurface(renderer, buttons[i].textSurface);
+            choose_lvl[i].isHovered = false;
+        }
+            // Display the pause screen and buttons
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 128);  // Semi-transparent black background
+            SDL_Rect pauseRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+            SDL_RenderFillRect(renderer, &pauseRect);
+
+            SDL_SetRenderDrawColor(renderer, resumeButton.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &resumeButton.rect);
+            SDL_RenderCopy(renderer, resumeButton.textTexture, NULL, &resumeButton.rect);
+
+            SDL_SetRenderDrawColor(renderer, mainMenuButton.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &mainMenuButton.rect);
+            SDL_RenderCopy(renderer, mainMenuButton.textTexture, NULL, &mainMenuButton.rect);
         }
         SDL_RenderPresent(renderer);
     }
