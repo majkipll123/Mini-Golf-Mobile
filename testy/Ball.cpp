@@ -4,6 +4,7 @@
  
 #include <iostream>
 #include "Ball.h"
+#include "Wall.h"
 
 const float FRICTION = 0.9997; // 0.9989  albo 0.9997 optymalna wartosc tarcia
 const float MIN_VELOCITY = 0.001; //  optymalna wartosc 0.001 minimalna wartosc przed zatrzymaniem
@@ -45,7 +46,7 @@ void Ball::move() {
     */
 }
 
-void Ball::handleCollision(int screenWidth, int screenHeight) {
+void Ball::handleCollision(int screenWidth, int screenHeight, const Wall& wall) {
    if (x - radius < 0) {
         x = radius;
         xVelocity = -xVelocity*0.75;
@@ -61,6 +62,26 @@ void Ball::handleCollision(int screenWidth, int screenHeight) {
     else if (y + radius > screenHeight) {
         y = screenHeight - radius;
         yVelocity = -yVelocity*0.75;
+    }
+    if (x - radius < wall.getX() + wall.getWidth() &&
+        x + radius > wall.getX() &&
+        y - radius < wall.getY() + wall.getHeight() &&
+        y + radius > wall.getY() ){
+
+        bool fromLeft = x < wall.getX();
+        bool fromRight = x > wall.getX() + wall.getWidth();
+        bool fromTop = y < wall.getY();
+        bool fromBottom = y > wall.getY() + wall.getHeight();
+
+
+        // Handle collision based on your requirements
+        // Example: Reflect the ball's velocity
+        if (fromLeft || fromRight) {
+            xVelocity = -xVelocity;
+        }
+        if (fromTop || fromBottom) {
+            yVelocity = -yVelocity;
+        }
     }
 }
 void Ball::stop() {
@@ -90,7 +111,9 @@ void Ball::setVelocity(float newXVelocity, float newYVelocity, float newZVelocit
     yVelocity = newYVelocity;
 }
 
-
+void Ball::resetHitCount() {
+    hitCount = 0;
+}
 
 void Ball::applyFriction() {
     // Move friction application to the beginning

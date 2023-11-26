@@ -5,6 +5,7 @@
 #include <iostream>
 #include<unistd.h>
 #include "Ball.h"
+#include "Wall.h"
 
 const float FRICTION = 0.95;
 
@@ -35,6 +36,15 @@ struct Hole {
     int radius;
 };
 
+Wall::Wall(int x, int y, int width, int height)
+    : x(x), y(y), width(width), height(height) {}
+
+void Wall::draw(SDL_Renderer* renderer) {
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);  // Set the color to blue (adjust as needed)
+    SDL_Rect wallRect = {x, y, width, height};
+    SDL_RenderFillRect(renderer, &wallRect);
+}
+
 bool isCollision(int ballX, int ballY, int ballRadius, const Hole& hole) {
     int dx = ballX - hole.x;
     int dy = ballY - hole.y;
@@ -44,26 +54,28 @@ bool isCollision(int ballX, int ballY, int ballRadius, const Hole& hole) {
 }
 
 int main(int argc, char* args[]) {
+
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         fprintf(stderr, "could not initialize SDL2: %s\n", SDL_GetError());
-        return 1;
+        return 0;
     }
 
     window = SDL_CreateWindow("Mini Golf Mobile", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (window == NULL) {
         fprintf(stderr, "could not create window: %s\n", SDL_GetError());
-        return 1;
+        return 0;
     }
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (renderer == NULL) {
         fprintf(stderr, "could not create renderer: %s\n", SDL_GetError());
-        return 1;
+        return 0;
     }
+
 
     // Initialize TTF
     TTF_Init();
@@ -75,8 +87,8 @@ int main(int argc, char* args[]) {
     const int buttonWidth = 400;
     const int buttonHeight = 75;
     const int screenWidth = SCREEN_WIDTH;
-    Button buttons[3];
-    Button choose_lvl[3];
+    Button buttons[6];
+    //Button buttons[3];
 
     for(int i = 0; i < 5; i++) {
         buttons[i].rect = {(screenWidth - buttonWidth)/2, i*100+100, buttonWidth, buttonHeight};
@@ -84,10 +96,16 @@ int main(int argc, char* args[]) {
         if ( i==0 )
             buttons[0].textSurface = TTF_RenderText_Solid(font, "Practise offline", {255, 255, 255});
         else if ( i==1 )
-            buttons[1].textSurface = TTF_RenderText_Solid(font, "Opcje", {255, 255, 255});
+            buttons[1].textSurface = TTF_RenderText_Solid(font, "Options", {255, 255, 255});
         else if ( i==2 )
-            buttons[2].textSurface = TTF_RenderText_Solid(font, "Wyjdz", {255, 255, 255});
-        
+            buttons[2].textSurface = TTF_RenderText_Solid(font, "Quit", {255, 255, 255});
+        else if ( i==3 )
+            buttons[3].textSurface = TTF_RenderText_Solid(font, "Level one ", {255, 255, 255});
+        else if ( i==4 )
+            buttons[4].textSurface = TTF_RenderText_Solid(font, "Level two", {255, 255, 255});
+        else if ( i==5 )
+            buttons[5].textSurface = TTF_RenderText_Solid(font, "Level three", {255, 255, 255});
+
         buttons[i].textTexture = SDL_CreateTextureFromSurface(renderer, buttons[i].textSurface);
         buttons[i].isHovered = false;
     }
@@ -112,7 +130,7 @@ int main(int argc, char* args[]) {
 
     // Create the "Back to Menu" button
     Button pauseMenuButton;
-    pauseMenuButton.rect = {SCREEN_WIDTH - buttonWidth - 20, 20, buttonWidth-100, buttonHeight-100};
+    pauseMenuButton.rect = {SCREEN_WIDTH - buttonWidth - 50, 25, buttonWidth, buttonHeight};
     pauseMenuButton.textSurface = TTF_RenderText_Solid(font, "Pause", {255, 255, 255});
     pauseMenuButton.textTexture = SDL_CreateTextureFromSurface(renderer, pauseMenuButton.textSurface);
     pauseMenuButton.isHovered = false;
@@ -138,7 +156,8 @@ int main(int argc, char* args[]) {
 
 
 
-//lvl_buttons
+//lvl_buttons'
+/*
     Button lvlOne;
     lvlOne.rect = {(screenWidth - buttonWidth) / 2, 300, buttonWidth, buttonHeight};
     lvlOne.textSurface = TTF_RenderText_Solid(font, "Level one.", {255, 255, 255});
@@ -156,7 +175,15 @@ int main(int argc, char* args[]) {
     lvlThree.textSurface = TTF_RenderText_Solid(font, "Level three.", {255, 255, 255});
     lvlThree.textTexture = SDL_CreateTextureFromSurface(renderer, lvlThree.textSurface);
     lvlThree.isHovered = false;
+
+*/
     bool quit = false;
+
+
+
+    Wall wall1(0,700,SCREEN_WIDTH/2,50);
+
+    Wall wall2(300,350,SCREEN_WIDTH/2,50);
     
     while (!quit) {
         SDL_Event e;
@@ -192,7 +219,7 @@ int main(int argc, char* args[]) {
                     SDL_Point point = {x, y};
                     
                     SDL_GetMouseState(&x, &y);
-                    std::cout << "Mouse clicked at (" << x << ", " << y << ")" << std::endl;
+                    //std::cout << "Mouse clicked at (" << x << ", " << y << ")" << std::endl;
 
                     prevMouseX = e.motion.x;
                     prevMouseY = e.motion.y;
@@ -204,32 +231,44 @@ int main(int argc, char* args[]) {
                             // Handle button click
                             if (i == 0) {
                                 // Transition to "1st level"
-                                gameState = CHOOSE_LVL;
+                                //gameState = CHOOSE_LVL;
                                 //usleep(1);
                                 // Initialize the game state for level 1 here
                             }
-                            if (i == 2) {
+                            else if (i == 2) {
 
                                 quit = true;
                             }
+                            else if (i == 3)
+                            {
+                                gameState = LEVEL_1;
+                            }
+                            else if (i == 4)
+                            {
+                                gameState = LEVEL_2;
+                            }
+                            else if (i == 5)
+                            {
+                                gameState = LEVEL_3;
+                            }                         
                         }
                     }
-                    for(int i = 0; i < 5; i++) {
-                        if (SDL_PointInRect(&point, &choose_lvl[i].rect)) {
-                            choose_lvl[i].isHovered = true;
-                        } else {
-                            choose_lvl[i].isHovered = false;
-                        }
+                    //for(int i = 0; i < 5; i++) {
+                    //    if (SDL_PointInRect(&point, &buttons[i].rect)) {
+                    //        buttons[i].isHovered = true;
+                    //    } else {
+                    //        buttons[i].isHovered = false;
+                    //    }
     
-                        //std::cout << "Checking button " << i << ": " << (choose_lvl[i].isHovered ? "Hovered!" : "Not hovered.") << std::endl;
-                    }
+                        //std::cout << "Checking button " << i << ": " << (buttons[i].isHovered ? "Hovered!" : "Not hovered.") << std::endl;
+                    //}
                         
-                        lvlOne.isHovered = SDL_PointInRect(&point, &lvlOne.rect);
-                        lvlTwo.isHovered = SDL_PointInRect(&point, &lvlTwo.rect);
-                        lvlThree.isHovered = SDL_PointInRect(&point, &lvlThree.rect);     
-                        for(int i = 0; i < 5; i++) {
+                       // lvlOne.isHovered = SDL_PointInRect(&point, &lvlOne.rect);
+                       // lvlTwo.isHovered = SDL_PointInRect(&point, &lvlTwo.rect);
+                       // lvlThree.isHovered = SDL_PointInRect(&point, &lvlThree.rect);     
+                        /*for(int i = 0; i < 5; i++) {
                         std::cout << "Checking button " << i << ": ";
-                            if (choose_lvl[i].isHovered) {  
+                            if (buttons[i].isHovered) {  
                             std::cout << "Hovered! ";
                             if (i == 0) {
                                 std::cout << "Level 1 selected." << std::endl;
@@ -246,7 +285,7 @@ int main(int argc, char* args[]) {
                         } else {
                             std::cout << "Not hovered." << std::endl;
                         }
-                    }
+                    }*/
 
                     
                     if (pauseMenuButton.isHovered && gameState == LEVEL_1) {
@@ -256,10 +295,17 @@ int main(int argc, char* args[]) {
                     if (resumeButton.isHovered && gameState == PAUSE) {
                         // Resume the game
                         gameState = LEVEL_1;
+
                     }
                     if (mainMenuButton.isHovered && (gameState == FINAL_SCREEN || gameState == PAUSE)) {
                         // Transition back to MENU
                         gameState = MENU;
+                        ball.setAcceleration(0, 0, 0.0);
+                        ball.setVelocity(0, 0, 0.0);
+                        ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT - 50);
+                        ball.resetHitCount();
+                       // ball.resetHitCount();
+
                         // Add any additional logic for transitioning back to MENU here
                     }
 
@@ -301,10 +347,45 @@ int main(int argc, char* args[]) {
             }
         } 
         else if (gameState == LEVEL_1) {
-            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT);
+            
+            //gameState = LEVEL_1;
+            //ball.resetHitCount();
+            //ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT - 50);
+
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall1);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall2);
             if (isCollision(ball.getX(), ball.getY(), ball.getRadius(), hole)) {
                 gameState = FINAL_SCREEN;
             }
+            ball.move();
+
+            // Draw the hole
+            filledCircleColor(renderer, hole.x, hole.y, hole.radius, 0xFF0000FF);
+            wall1.draw(renderer);
+            wall2.draw(renderer);
+            // Draw the ball after the hole to ensure it's not covered
+            ball.draw(renderer);
+            
+
+            SDL_SetRenderDrawColor(renderer, pauseMenuButton.isHovered ? 0 : 0, 0, 255, 125);
+            SDL_RenderFillRect(renderer, &pauseMenuButton.rect);
+            SDL_RenderCopy(renderer, pauseMenuButton.textTexture, NULL, &pauseMenuButton.rect);
+
+        }
+        else if (gameState == LEVEL_2) {
+            // Draw the walls
+
+
+            // Add more walls as needed
+            // wall3.draw(renderer);
+            // ...
+
+            // Handle ball-wall collisions
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall1);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall2);
+            // Handle collisions with other walls
+            // ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall3);
+            // ...
             ball.move();
 
             // Draw the hole
@@ -317,8 +398,8 @@ int main(int argc, char* args[]) {
             SDL_SetRenderDrawColor(renderer, pauseMenuButton.isHovered ? 0 : 0, 0, 255, 125);
             SDL_RenderFillRect(renderer, &pauseMenuButton.rect);
             SDL_RenderCopy(renderer, pauseMenuButton.textTexture, NULL, &pauseMenuButton.rect);
-
         }
+
         else if (gameState == PAUSE) {
             // Display the pause screen and buttons
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 128);  // Semi-transparent black background
@@ -363,20 +444,21 @@ int main(int argc, char* args[]) {
         }
 
         else if (gameState == CHOOSE_LVL) {
-            // choose_lvl 
+            // buttons 
             for(int i = 0; i < 5; i++) {
                 //name the buttons
                 if (i == 0)
-                    choose_lvl[0].textSurface = TTF_RenderText_Solid(font, "LEVEL ONE", {255, 255, 255});
+                    buttons[0].textSurface = TTF_RenderText_Solid(font, "LEVEL ONE", {255, 255, 255});
                 else if (i == 1)
-                    choose_lvl[1].textSurface = TTF_RenderText_Solid(font, "LEVEL TWO", {255, 255, 255});
+                    buttons[1].textSurface = TTF_RenderText_Solid(font, "LEVEL TWO", {255, 255, 255});
                 else if (i == 2)
-                    choose_lvl[2].textSurface = TTF_RenderText_Solid(font, "LEVEL THREE", {255, 255, 255});
+                    buttons[2].textSurface = TTF_RenderText_Solid(font, "LEVEL THREE", {255, 255, 255});
 
-                choose_lvl[i].textTexture = SDL_CreateTextureFromSurface(renderer, choose_lvl[i].textSurface);
-                choose_lvl[i].isHovered = false;
+                buttons[i].textTexture = SDL_CreateTextureFromSurface(renderer, buttons[i].textSurface);
+                buttons[i].isHovered = false;
             }
             // Display the pause screen and buttons
+            /*
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 128);  // Semi-transparent black background
             SDL_Rect pauseRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
             SDL_RenderFillRect(renderer, &pauseRect);
@@ -393,7 +475,7 @@ int main(int argc, char* args[]) {
             SDL_SetRenderDrawColor(renderer, lvlThree.isHovered ? 255 : 0, 0, 0, 255);
             SDL_RenderFillRect(renderer, &lvlThree.rect);
             SDL_RenderCopy(renderer, lvlThree.textTexture, NULL, &lvlThree.rect);
-        }
+        */}
         SDL_RenderPresent(renderer);
     }
 
@@ -401,8 +483,8 @@ int main(int argc, char* args[]) {
     for(int i = 0; i < 5; i++) {
         SDL_FreeSurface(buttons[i].textSurface);
         SDL_DestroyTexture(buttons[i].textTexture);
-        SDL_FreeSurface(choose_lvl[i].textSurface);
-        SDL_DestroyTexture(choose_lvl[i].textTexture);
+        //SDL_FreeSurface(buttons[i].textSurface);
+        //SDL_DestroyTexture(buttons[i].textTexture);
     }
 
     TTF_CloseFont(font);

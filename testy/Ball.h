@@ -3,18 +3,21 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
+#include "Wall.h"  // Include Wall.h here
 
 class Ball {
 public:
     Ball(int radius, int startX, int startY);
     void move();
     void stop();
-    void handleCollision(int screenWidth, int screenHeight);
+    void handleCollision(int screenWidth, int screenHeight, const Wall& wall);
+
     void draw(SDL_Renderer* renderer);
     void setPosition(float newX, float newY);
     void setAcceleration(float newXAcceleration, float newYAcceleration, float newZAcceleration);
     void setVelocity(float newXVelocity, float newYVelocity, float);
     void applyFriction();
+    void resetHitCount();
     
     bool isready() const {
         return ready;
