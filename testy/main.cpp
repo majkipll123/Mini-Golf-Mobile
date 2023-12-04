@@ -7,7 +7,7 @@
 #include <sqlite3.h>
 #include "Ball.h"
 #include "Wall.h"
-
+#include "Booster.h"
 const float FRICTION = 0.95;
 
 #define SCREEN_WIDTH 500
@@ -294,6 +294,8 @@ int main(int argc, char* args[]) {
 */
     bool quit = false;
 
+    // lvl1
+    //Booster booster1(10,100,100);
 
     // lvl2
     Wall wall1(0,700,SCREEN_WIDTH/2,50);
@@ -301,7 +303,9 @@ int main(int argc, char* args[]) {
     // lvl3
     Wall wall3(SCREEN_WIDTH/3,150,50,SCREEN_HEIGHT);
     Wall wall4(300,550,SCREEN_WIDTH/2,50);
-    Wall wall5(SCREEN_WIDTH/3,250,SCREEN_WIDTH/3+75,50);
+    Wall wall5(SCREEN_WIDTH/3,250,SCREEN_WIDTH/3+50,50);
+
+
 
     Wall empty(0,0,0,0);
     
@@ -376,6 +380,7 @@ int main(int argc, char* args[]) {
                             else if (i == 5)
                             {
                                 gameState = LEVEL_3;
+                                ball.setPosition(SCREEN_WIDTH-60,SCREEN_HEIGHT-55);
                             }   
                             else if (i == 6)    
                             {
@@ -461,7 +466,7 @@ int main(int argc, char* args[]) {
 
                         // Add any additional logic for transitioning back to MENU here
                     }
-                    else if (gameState == FINAL_SCREEN2 || gameState == PAUSE_2){
+                    else if (mainMenuButton.isHovered &&(gameState == FINAL_SCREEN2 || gameState == PAUSE_2)){
                         // Transition back to MENU
                         gameState = MENU;
                         ball.setAcceleration(0, 0, 0.0);
@@ -472,12 +477,12 @@ int main(int argc, char* args[]) {
 
                         // Add any additional logic for transitioning back to MENU here
                     }
-                    else if (gameState == FINAL_SCREEN3 || gameState == PAUSE_3){
+                    else if (mainMenuButton.isHovered &&(gameState == FINAL_SCREEN3 || gameState == PAUSE_3)){
                         // Transition back to MENU
                         gameState = MENU;
                         ball.setAcceleration(0, 0, 0.0);
                         ball.setVelocity(0, 0, 0.0);
-                        ball.setPosition(SCREEN_WIDTH-50, SCREEN_HEIGHT - 50);
+                        ball.setPosition(SCREEN_WIDTH-25, SCREEN_HEIGHT - 50);
                         ball.resetHitCount();
                        // ball.resetHitCount();
 
@@ -558,9 +563,7 @@ int main(int argc, char* args[]) {
                 hole.x = SCREEN_WIDTH/2 ;/* X-coordinate of the hole */;
                 hole.y = SCREEN_WIDTH/5+75 ;/* Y-coordinate of the hole */;
                 hole.radius = 15 ;
-            //gameState = LEVEL_1;
-            //ball.resetHitCount();
-            //ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT - 50);
+            
 
             ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, empty);
             ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, empty);
