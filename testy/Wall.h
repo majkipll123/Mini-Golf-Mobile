@@ -7,7 +7,7 @@ class Wall {
 public:
     Wall(int x, int y, int width, int height);
     void draw(SDL_Renderer* renderer);
-    
+    virtual ~Wall() = default;
     int getX() const { return x; }
     int getY() const { return y; }
     int getWidth() const { return width; }

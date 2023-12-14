@@ -4,13 +4,18 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include "Wall.h"  // Include Wall.h here
-
+#include "Booster.h"
+#include "Sand.h"
+class Booster;
 class Ball {
 public:
     Ball(int radius, int startX, int startY);
     void move();
     void stop();
     void handleCollision(int screenWidth, int screenHeight, const Wall& wall);
+
+    void handleSlopeCollision(const Sand& slope);
+    void handleBoosterCollision(Booster& booster);
 
     void draw(SDL_Renderer* renderer);
     void setPosition(float newX, float newY);

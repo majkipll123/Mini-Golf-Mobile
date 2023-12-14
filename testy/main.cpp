@@ -8,6 +8,7 @@
 #include "Ball.h"
 #include "Wall.h"
 #include "Booster.h"
+#include "Sand.h"   
 const float FRICTION = 0.95;
 
 #define SCREEN_WIDTH 500
@@ -294,15 +295,17 @@ int main(int argc, char* args[]) {
 */
     bool quit = false;
 
-    // lvl1
-    //Booster booster1(10,100,100);
 
-    // lvl2
+    Sand sandSlope(SCREEN_WIDTH/4, 200, SCREEN_WIDTH/2, 300);
+    // lvl1
+    Booster booster1(10,SCREEN_WIDTH/3,SCREEN_HEIGHT-100);
+
+    // lvl2// wall is posx posy widthx widthy
     Wall wall1(0,700,SCREEN_WIDTH/2,50);
     Wall wall2(300,350,SCREEN_WIDTH/2,50);
     // lvl3
     Wall wall3(SCREEN_WIDTH/3,150,50,SCREEN_HEIGHT);
-    Wall wall4(300,550,SCREEN_WIDTH/2,50);
+    Wall wall4(300,540,SCREEN_WIDTH/2,50);
     Wall wall5(SCREEN_WIDTH/3,250,SCREEN_WIDTH/3+50,50);
 
 
@@ -372,10 +375,13 @@ int main(int argc, char* args[]) {
                             else if (i == 3)
                             {
                                 gameState = LEVEL_1;
+                                booster1.setCollected(false);
+                                ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT - 50);
                             }
                             else if (i == 4)
                             {
                                 gameState = LEVEL_2;
+                                ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT - 50);
                             }
                             else if (i == 5)
                             {
@@ -563,10 +569,16 @@ int main(int argc, char* args[]) {
                 hole.x = SCREEN_WIDTH/2 ;/* X-coordinate of the hole */;
                 hole.y = SCREEN_WIDTH/5+75 ;/* Y-coordinate of the hole */;
                 hole.radius = 15 ;
-            
 
+            
+            ball.handleBoosterCollision(booster1);
+            //ball.handleCollision(SCREEN_WIDTH,SCREEN_HEIGHT, sandSlope);
+            ball.handleSlopeCollision(sandSlope);
             ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, empty);
-            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, empty);
+            SDL_SetRenderDrawColor(renderer, 255, 204, 102, 255); // Sand color (adjust as needed)
+            SDL_Rect sandRect = {sandSlope.getX(), sandSlope.getY(), sandSlope.getWidth(), sandSlope.getHeight()};
+            SDL_RenderFillRect(renderer, &sandRect);
+            
             if (isCollision(ball.getX(), ball.getY(), ball.getRadius(), hole)) {
                 gameState = FINAL_SCREEN;
 
@@ -578,17 +590,23 @@ int main(int argc, char* args[]) {
             ball.move();
 
             // Draw the hole
+            
             filledCircleColor(renderer, hole.x, hole.y, hole.radius, 0xFF0000FF);
+            filledCircleColor(renderer, hole.x, hole.y, hole.radius, 0xFF0000FF);
+
             //wall1.draw(renderer);
             //wall2.draw(renderer);
             // Draw the ball after the hole to ensure it's not covered
             ball.draw(renderer);
-            
 
+            if (!booster1.isCollected())
+                booster1.draw(renderer);
+           
             SDL_SetRenderDrawColor(renderer, pause1MenuButton.isHovered ? 0 : 0, 0, 255, 125);
             SDL_RenderFillRect(renderer, &pause1MenuButton.rect);
             SDL_RenderCopy(renderer, pause1MenuButton.textTexture, NULL, &pause1MenuButton.rect);
-
+            
+            SDL_RenderPresent(renderer);
         }
         else if (gameState == LEVEL_2) {
                 hole.x = SCREEN_WIDTH/2 ;/* X-coordinate of the hole */;

@@ -15,6 +15,9 @@ public:
     bool isCollected() const { return collected; }
     void setCollected(bool value) { collected = value; }
 
+    int getRadius() const { return radius; }
+
+   // friend class Ball;
 private:
     int x, y;
     int radius;
