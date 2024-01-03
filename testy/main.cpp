@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL_mixer.h>
 #include <cmath>
 #include <iostream>
 #include <unistd.h>
@@ -71,7 +72,37 @@ void initializeDatabase(sqlite3* db, int level) {
     }
 }
 
+void playSound() {
+    // Initialize SDL
+    if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+        std::cerr << "SDL initialization failed: " << SDL_GetError() << std::endl;
+        return;
+    }
 
+    // Initialize SDL_mixer
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+        std::cerr << "SDL_mixer initialization failed: " << Mix_GetError() << std::endl;
+        SDL_Quit();
+        return;
+    }
+
+    // Load sound from a file (you need to provide a valid path to your sound file)
+    Mix_Chunk* sound = Mix_LoadWAV("/home/majkipll123/Documents/Github/Mini-Golf-Mobile/testy/bat hit against wall.wav");
+    if (!sound) {
+        std::cerr << "Failed to load sound file: " << Mix_GetError() << std::endl;
+        Mix_CloseAudio();
+        SDL_Quit();
+        return;
+    }
+
+    // Play the sound
+    Mix_PlayChannel(-1, sound, 0);
+
+    // Wait until the sound is finished playing (optional)
+    while (Mix_Playing(-1) != 0) {
+        // Do nothing, just wait
+    }
+}
 void insertBestShots(sqlite3* db, int level, int bestShots) {
     // Insert the best shots for the specified level
     std::string insertSQL = "INSERT INTO lvl" + std::to_string(level) + "record (shots) VALUES (?);";
@@ -130,7 +161,30 @@ void resetRecords(sqlite3* db, int level) {
         std::cout << "All records for level " << level << " have been deleted." << std::endl;
     }
 }
+void drawFilledCircle(SDL_Renderer* renderer, int centerX, int centerY, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+    SDL_SetRenderDrawColor(renderer, r, g, b, a);
 
+    int x = radius;
+    int y = 0;
+    int radiusError = 1 - x;
+
+    while (x >= y) {
+        SDL_RenderDrawLine(renderer, centerX - x, centerY + y, centerX + x, centerY + y);
+        SDL_RenderDrawLine(renderer, centerX - x, centerY - y, centerX + x, centerY - y);
+
+        SDL_RenderDrawLine(renderer, centerX - y, centerY + x, centerX + y, centerY + x);
+        SDL_RenderDrawLine(renderer, centerX - y, centerY - x, centerX + y, centerY - x);
+
+        y++;
+
+        if (radiusError < 0) {
+            radiusError += 2 * y + 1;
+        } else {
+            x--;
+            radiusError += 2 * (y - x + 1);
+        }
+    }
+}
 
 
 
@@ -296,7 +350,7 @@ int main(int argc, char* args[]) {
     bool quit = false;
 
 
-    Sand sandSlope(SCREEN_WIDTH/4, 200, SCREEN_WIDTH/2, 300);
+    Sand sandSlope(500, 500, SCREEN_WIDTH/2, 300);
     // lvl1
     Booster booster1(10,SCREEN_WIDTH/3,SCREEN_HEIGHT-100);
 
@@ -570,14 +624,12 @@ int main(int argc, char* args[]) {
                 hole.y = SCREEN_WIDTH/5+75 ;/* Y-coordinate of the hole */;
                 hole.radius = 15 ;
 
-            
             ball.handleBoosterCollision(booster1);
             //ball.handleCollision(SCREEN_WIDTH,SCREEN_HEIGHT, sandSlope);
             ball.handleSlopeCollision(sandSlope);
             ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, empty);
             SDL_SetRenderDrawColor(renderer, 255, 204, 102, 255); // Sand color (adjust as needed)
-            SDL_Rect sandRect = {sandSlope.getX(), sandSlope.getY(), sandSlope.getWidth(), sandSlope.getHeight()};
-            SDL_RenderFillRect(renderer, &sandRect);
+            sandSlope.draw(renderer);
             
             if (isCollision(ball.getX(), ball.getY(), ball.getRadius(), hole)) {
                 gameState = FINAL_SCREEN;
@@ -592,7 +644,7 @@ int main(int argc, char* args[]) {
             // Draw the hole
             
             filledCircleColor(renderer, hole.x, hole.y, hole.radius, 0xFF0000FF);
-            filledCircleColor(renderer, hole.x, hole.y, hole.radius, 0xFF0000FF);
+            //filledCircleColor(renderer, hole.x, hole.y, hole.radius, 0xFF0000FF);
 
             //wall1.draw(renderer);
             //wall2.draw(renderer);
@@ -620,6 +672,7 @@ int main(int argc, char* args[]) {
             ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall2);
             if (isCollision(ball.getX(), ball.getY(), ball.getRadius(), hole)) {
                 gameState = FINAL_SCREEN2;
+
 
                 insertBestShots(db, 2, ball.getHitCount());
 
@@ -820,8 +873,10 @@ int main(int argc, char* args[]) {
         //SDL_FreeSurface(buttons[i].textSurface);
         //SDL_DestroyTexture(buttons[i].textTexture);
     }
+    Mix_FreeChunk(sound);
     sqlite3_close(db);
     TTF_CloseFont(font);
+    Mix_CloseAudio();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     TTF_Quit();

@@ -8,7 +8,7 @@
 #include "Sand.h"
 
 const float FRICTION = 0.9997;
-const float SAND_FRICTION = 0.9555; // 0.9989  albo 0.9997 optymalna wartosc tarcia
+const float SAND_FRICTION = 0.9994; // 0.9989  albo 0.9997 optymalna wartosc tarcia
 const float MIN_VELOCITY = 0.001; //  optymalna wartosc 0.001 minimalna wartosc przed zatrzymaniem
 
 Ball::Ball(int radius, int startX, int startY) : radius(radius), x(startX), y(startY), xVelocity(0), yVelocity(0), zVelocity(0), xAcceleration(0), yAcceleration(0), zAcceleration(0), hitCount(0) {
@@ -106,6 +106,10 @@ void Ball::handleSlopeCollision(const Sand& sand) {
         // Calculate the angle between the ball and the sand
         float angle = atan2(sand.getY() - y, sand.getX() - x);
         std::cout<<"hit sand\n";
+
+        
+        // Calculate the new velocity components based on the ball's current velocity
+
         // Calculate the new velocity components based on the ball's current velocity
         float newVelocityX = xVelocity *SAND_FRICTION;
         float newVelocityY = yVelocity *SAND_FRICTION;
@@ -114,6 +118,8 @@ void Ball::handleSlopeCollision(const Sand& sand) {
         setVelocity(newVelocityX, newVelocityY, 0);
 
         // Additional actions, e.g., increase score, etc.
+        //if ((xVelocity <= MIN_VELOCITY) && (yVelocity <= MIN_VELOCITY))
+        //{stop();}
     }
 }
 
