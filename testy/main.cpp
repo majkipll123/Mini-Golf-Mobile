@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_ttf.h>
-#include <SDL_mixer.h>
+//#include <SDL_mixer.h>
 #include <cmath>
 #include <iostream>
 #include <unistd.h>
@@ -21,12 +21,20 @@ enum GameState {
     LEVEL_1,
     LEVEL_2,
     LEVEL_3,
+    LEVEL_4,
+    LEVEL_5,
+    LEVEL_6,
     PAUSE_1,
     PAUSE_2,
     PAUSE_3, 
+    PAUSE_4,
+    PAUSE_5,
     FINAL_SCREEN,
     FINAL_SCREEN2,
-    FINAL_SCREEN3// New game state for the pause screen
+    FINAL_SCREEN3,
+    FINAL_SCREEN4,
+    FINAL_SCREEN5,
+    FINAL_SCREEN6// New game state for the pause screen
 };
 
 // Define the button structure
@@ -71,7 +79,7 @@ void initializeDatabase(sqlite3* db, int level) {
         sqlite3_free(errorMessage);
     }
 }
-
+/*
 void playSound() {
     // Initialize SDL
     if (SDL_Init(SDL_INIT_AUDIO) < 0) {
@@ -103,6 +111,7 @@ void playSound() {
         // Do nothing, just wait
     }
 }
+*/
 void insertBestShots(sqlite3* db, int level, int bestShots) {
     // Insert the best shots for the specified level
     std::string insertSQL = "INSERT INTO lvl" + std::to_string(level) + "record (shots) VALUES (?);";
@@ -231,12 +240,12 @@ int main(int argc, char* args[]) {
 
     // Create the buttons
     const int buttonWidth = 400;
-    const int buttonHeight = 75;
+    const int buttonHeight = 60;
     const int screenWidth = SCREEN_WIDTH;
-    Button buttons[8];
-    //Button buttons[3];
+    Button buttons[5];
+    Button levels_buttons[6];
     //newbutton
-    for(int i = 0; i <= 7; i++) {
+    for(int i = 0; i <= 4; i++) {
         buttons[i].rect = {(screenWidth - buttonWidth)/2, i*100+100, buttonWidth, buttonHeight};
         //name the buttons
         if ( i==0 )
@@ -246,19 +255,15 @@ int main(int argc, char* args[]) {
         else if ( i==2 )
             buttons[2].textSurface = TTF_RenderText_Solid(font, "Quit", {255, 255, 255});
         else if ( i==3 )
-            buttons[3].textSurface = TTF_RenderText_Solid(font, "Level one ", {255, 255, 255});
+            buttons[3].textSurface = TTF_RenderText_Solid(font, "Delete all records", {255, 255, 255});
         else if ( i==4 )
-            buttons[4].textSurface = TTF_RenderText_Solid(font, "Level two", {255, 255, 255});
-        else if ( i==5 )
-            buttons[5].textSurface = TTF_RenderText_Solid(font, "Level three", {255, 255, 255});
-        else if ( i==6 )
-            buttons[6].textSurface = TTF_RenderText_Solid(font, "Delete all records", {255, 255, 255});
-        else if ( i==7 )
-            buttons[7].textSurface = TTF_RenderText_Solid(font, "Level bacd", {255, 255, 255});
+            buttons[4].textSurface = TTF_RenderText_Solid(font, "Level bacd", {255, 255, 255});
 
         buttons[i].textTexture = SDL_CreateTextureFromSurface(renderer, buttons[i].textSurface);
         buttons[i].isHovered = false;
     }
+
+
     Hole hole;
 
     Ball ball(20, SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50);
@@ -327,26 +332,43 @@ int main(int argc, char* args[]) {
 
 
 //lvl_buttons'
-/*
+
     Button lvlOne;
-    lvlOne.rect = {(screenWidth - buttonWidth) / 2, 300, buttonWidth, buttonHeight};
+    lvlOne.rect = {(screenWidth - buttonWidth) / 2, 250, buttonWidth, buttonHeight};
     lvlOne.textSurface = TTF_RenderText_Solid(font, "Level one.", {255, 255, 255});
     lvlOne.textTexture = SDL_CreateTextureFromSurface(renderer, lvlOne.textSurface);
     lvlOne.isHovered = false;
 
     Button lvlTwo;
-    lvlTwo.rect = {(screenWidth - buttonWidth) / 2, 450, buttonWidth, buttonHeight};
+    lvlTwo.rect = {(screenWidth - buttonWidth) / 2, 310, buttonWidth, buttonHeight};
     lvlTwo.textSurface = TTF_RenderText_Solid(font, "Level two.", {255, 255, 255});
     lvlTwo.textTexture = SDL_CreateTextureFromSurface(renderer, lvlTwo.textSurface);
     lvlTwo.isHovered = false;
 
     Button lvlThree;
-    lvlThree.rect = {(screenWidth - buttonWidth) / 2, 600, buttonWidth, buttonHeight};
+    lvlThree.rect = {(screenWidth - buttonWidth) / 2, 370, buttonWidth, buttonHeight};
     lvlThree.textSurface = TTF_RenderText_Solid(font, "Level three.", {255, 255, 255});
     lvlThree.textTexture = SDL_CreateTextureFromSurface(renderer, lvlThree.textSurface);
     lvlThree.isHovered = false;
 
-*/
+    Button lvlFour;
+    lvlFour.rect = {(screenWidth - buttonWidth) / 2, 430, buttonWidth, buttonHeight};
+    lvlFour.textSurface = TTF_RenderText_Solid(font, "Level Four.", {255, 255, 255});
+    lvlFour.textTexture = SDL_CreateTextureFromSurface(renderer, lvlFour.textSurface);
+    lvlFour.isHovered = false;
+        
+    Button lvlFive;
+    lvlFive.rect = {(screenWidth - buttonWidth) / 2, 490, buttonWidth, buttonHeight};
+    lvlFive.textSurface = TTF_RenderText_Solid(font, "Level Five.", {255, 255, 255});
+    lvlFive.textTexture = SDL_CreateTextureFromSurface(renderer, lvlFive.textSurface);
+    lvlFive.isHovered = false;
+
+    Button lvlSix;
+    lvlSix.rect = {(screenWidth - buttonWidth) / 2, 550, buttonWidth, buttonHeight};
+    lvlSix.textSurface = TTF_RenderText_Solid(font, "Level Six.", {255, 255, 255});
+    lvlSix.textTexture = SDL_CreateTextureFromSurface(renderer, lvlSix.textSurface);
+    lvlSix.isHovered = false;
+
     bool quit = false;
 
 
@@ -384,6 +406,14 @@ int main(int argc, char* args[]) {
                     }
 
                 }
+                for(int i = 0; i <=2; i++) {
+                    if (SDL_PointInRect(&point, &levels_buttons[i].rect)) {
+                        levels_buttons[i].isHovered = true;
+                    } else {
+                        levels_buttons[i].isHovered = false;
+                    }
+
+                }
                 pause1MenuButton.isHovered = SDL_PointInRect(&point, &pause1MenuButton.rect);
                 resume1Button.isHovered = SDL_PointInRect(&point, &resume1Button.rect);
                 pause2MenuButton.isHovered = SDL_PointInRect(&point, &pause1MenuButton.rect);
@@ -391,6 +421,12 @@ int main(int argc, char* args[]) {
                 mainMenuButton.isHovered = SDL_PointInRect(&point, &mainMenuButton.rect);
                 resume3Button.isHovered = SDL_PointInRect(&point, &resume3Button.rect);
                 pause3MenuButton.isHovered = SDL_PointInRect(&point, &pause3MenuButton.rect);
+                lvlOne.isHovered = SDL_PointInRect(&point, &lvlOne.rect);
+                lvlThree.isHovered = SDL_PointInRect(&point, &lvlThree.rect);
+                lvlTwo.isHovered = SDL_PointInRect(&point, &lvlTwo.rect);
+                lvlFour.isHovered = SDL_PointInRect(&point, &lvlFour.rect);
+                lvlFive.isHovered = SDL_PointInRect(&point, &lvlFive.rect);
+                lvlSix.isHovered = SDL_PointInRect(&point, &lvlSix.rect);
                 //resetButton.isHovered = SDL_PointInRect(&point, &resetButton.rect);
 
 
@@ -413,12 +449,12 @@ int main(int argc, char* args[]) {
 
                             
                         //newbutton
-                    for(int i = 0; i < 7; i++) {
+                    for(int i = 0; i < 5; i++) {
                         if (buttons[i].isHovered && gameState == MENU) {
                             // Handle button click
                             if (i == 0) {
                                 // Transition to "1st level"
-                                //gameState = CHOOSE_LVL;
+                                gameState = CHOOSE_LVL;
                                 //usleep(1);
                                 // Initialize the game state for level 1 here
                             }
@@ -428,9 +464,12 @@ int main(int argc, char* args[]) {
                             }
                             else if (i == 3)
                             {
-                                gameState = LEVEL_1;
-                                booster1.setCollected(false);
-                                ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT - 50);
+                                for(int i=1; i<=3; i++)
+                                { 
+                                
+                                resetRecords(db, i);
+                                }
+
                             }
                             else if (i == 4)
                             {
@@ -444,11 +483,7 @@ int main(int argc, char* args[]) {
                             }   
                             else if (i == 6)    
                             {
-                                for(int i=1; i<=3; i++)
-                                { 
-                                
-                                resetRecords(db, i);
-                                }
+
                                 
                             }                  
                         }
@@ -552,7 +587,15 @@ int main(int argc, char* args[]) {
                         lvlTwo.isHovered = SDL_PointInRect(&point, &lvlTwo.rect);
                         lvlThree.isHovered = SDL_PointInRect(&point, &lvlThree.rect);
                     */
-                              
+                    else if (lvlOne.isHovered && gameState == CHOOSE_LVL){
+                        // Transition back to MENU
+                        gameState = LEVEL_1;
+                        booster1.setCollected(false);
+                        ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT - 50);
+                       // ball.resetHitCount();
+
+                        // Add any additional logic for transitioning back to MENU here
+                    }
                 }
             } else if (e.type == SDL_MOUSEBUTTONUP) {
                 if (e.button.button == SDL_BUTTON_LEFT && ball.isready() && gameState == LEVEL_1) {
@@ -612,13 +655,52 @@ int main(int argc, char* args[]) {
 
         if (gameState == MENU) {
             //newbutton
-            for(int i = 0; i < 7; i++) {
+            for(int i = 0; i < 5; i++) {
                 SDL_SetRenderDrawColor(renderer, buttons[i].isHovered ? 255 : 0, 0, 0, 255);
                 SDL_RenderFillRect(renderer, &buttons[i].rect);
                 SDL_RenderCopy(renderer, buttons[i].textTexture, NULL, &buttons[i].rect);
             }
-           
+        
         } 
+        else if (gameState == CHOOSE_LVL) {
+            // Display buttons
+            
+            /*for(int i = 0; i <=2 ; i++) {
+                std::cout<<"tak";
+
+                SDL_SetRenderDrawColor(renderer, levels_buttons[i].isHovered ? 255 : 0, 0, 0, 255);
+                SDL_RenderFillRect(renderer, &levels_buttons[i].rect);
+                SDL_RenderCopy(renderer, levels_buttons[i].textTexture, NULL, &levels_buttons[i].rect);
+            }*/
+            SDL_SetRenderDrawColor(renderer, lvlOne.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &lvlOne.rect);
+            SDL_RenderCopy(renderer, lvlOne.textTexture, NULL, &lvlOne.rect);
+
+            SDL_SetRenderDrawColor(renderer, lvlTwo.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &lvlTwo.rect);
+            SDL_RenderCopy(renderer, lvlTwo.textTexture, NULL, &lvlTwo.rect);
+
+            SDL_SetRenderDrawColor(renderer, lvlThree.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &lvlThree.rect);
+            SDL_RenderCopy(renderer, lvlThree.textTexture, NULL, &lvlThree.rect);
+
+            SDL_SetRenderDrawColor(renderer, lvlFour.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &lvlFour.rect);
+            SDL_RenderCopy(renderer, lvlFour.textTexture, NULL, &lvlFour.rect);
+
+            SDL_SetRenderDrawColor(renderer, lvlFive.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &lvlFive.rect);
+            SDL_RenderCopy(renderer, lvlFive.textTexture, NULL, &lvlFive.rect);
+
+            SDL_SetRenderDrawColor(renderer, lvlSix.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &lvlSix.rect);
+            SDL_RenderCopy(renderer, lvlSix.textTexture, NULL, &lvlSix.rect);
+
+            SDL_SetRenderDrawColor(renderer, mainMenuButton.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &mainMenuButton.rect);
+            SDL_RenderCopy(renderer, mainMenuButton.textTexture, NULL, &mainMenuButton.rect);
+            
+        }
         else if (gameState == LEVEL_1) {
                 hole.x = SCREEN_WIDTH/2 ;/* X-coordinate of the hole */;
                 hole.y = SCREEN_WIDTH/5+75 ;/* Y-coordinate of the hole */;
@@ -632,7 +714,7 @@ int main(int argc, char* args[]) {
             sandSlope.draw(renderer);
             
             if (isCollision(ball.getX(), ball.getY(), ball.getRadius(), hole)) {
-                gameState = FINAL_SCREEN;
+                gameState = CHOOSE_LVL;
 
                 insertBestShots(db, 1, ball.getHitCount());
 
@@ -824,59 +906,22 @@ int main(int argc, char* args[]) {
             SDL_RenderFillRect(renderer, &pause1MenuButton.rect);
             SDL_RenderCopy(renderer, pause1MenuButton.textTexture, NULL, &pause1MenuButton.rect);
         }*/
-        
-
-        
-        
-
-        else if (gameState == CHOOSE_LVL) {
-            // newbutton
-            for(int i = 0; i < 7; i++) {
-                //name the buttons
-                if (i == 0)
-                    buttons[0].textSurface = TTF_RenderText_Solid(font, "LEVEL ONE", {255, 255, 255});
-                else if (i == 1)
-                    buttons[1].textSurface = TTF_RenderText_Solid(font, "LEVEL TWO", {255, 255, 255});
-                else if (i == 2)
-                    buttons[2].textSurface = TTF_RenderText_Solid(font, "LEVEL THREE", {255, 255, 255});
-
-                buttons[i].textTexture = SDL_CreateTextureFromSurface(renderer, buttons[i].textSurface);
-                buttons[i].isHovered = false;
-            }
-            // Display the pause screen and buttons
-            /*
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 128);  // Semi-transparent black background
-            SDL_Rect pauseRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-            SDL_RenderFillRect(renderer, &pauseRect);
-
-            SDL_SetRenderDrawColor(renderer, lvlOne.isHovered ? 255 : 0, 0, 0, 255);
-            SDL_RenderFillRect(renderer, &lvlOne.rect);
-            SDL_RenderCopy(renderer, lvlOne.textTexture, NULL, &lvlOne.rect);
-
-
-            SDL_SetRenderDrawColor(renderer, lvlTwo.isHovered ? 255 : 0, 0, 0, 255);
-            SDL_RenderFillRect(renderer, &lvlTwo.rect);
-            SDL_RenderCopy(renderer, lvlTwo.textTexture, NULL, &lvlTwo.rect);
-
-            SDL_SetRenderDrawColor(renderer, lvlThree.isHovered ? 255 : 0, 0, 0, 255);
-            SDL_RenderFillRect(renderer, &lvlThree.rect);
-            SDL_RenderCopy(renderer, lvlThree.textTexture, NULL, &lvlThree.rect);
-        */}
+ 
         SDL_RenderPresent(renderer);
     }
 
     // Cleanup
     //newbutton
-    for(int i = 0; i < 7; i++) {
+    for(int i = 0; i < 5; i++) {
         SDL_FreeSurface(buttons[i].textSurface);
         SDL_DestroyTexture(buttons[i].textTexture);
-        //SDL_FreeSurface(buttons[i].textSurface);
-        //SDL_DestroyTexture(buttons[i].textTexture);
+        SDL_FreeSurface(levels_buttons[i].textSurface);
+        SDL_DestroyTexture(levels_buttons[i].textTexture);
     }
-    Mix_FreeChunk(sound);
+    //Mix_FreeChunk(sound);
     sqlite3_close(db);
     TTF_CloseFont(font);
-    Mix_CloseAudio();
+    //Mix_CloseAudio();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     TTF_Quit();
