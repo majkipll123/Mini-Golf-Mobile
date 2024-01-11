@@ -377,12 +377,25 @@ int main(int argc, char* args[]) {
     Booster booster1(10,SCREEN_WIDTH/3,SCREEN_HEIGHT-100);
 
     // lvl2// wall is posx posy widthx widthy
-    Wall wall1(0,700,SCREEN_WIDTH/2,50);
-    Wall wall2(300,350,SCREEN_WIDTH/2,50);
-    // lvl3
+    Wall wall1(0,350,SCREEN_WIDTH/2,50);
+    Wall wall2(250,650,SCREEN_WIDTH/2,50);
+
+
+
+
+    /*
+    lvl3
+    Wall wall6(SCREEN_WIDTH/3,150,50,SCREEN_HEIGHT);
+    Wall wall7(300,540,SCREEN_WIDTH/2,50);
+    Wall wall8(SCREEN_WIDTH/3,250,SCREEN_WIDTH/3+50,50);
+    Wall wall(SCREEN_WIDTH/3,250,SCREEN_WIDTH/3+50,50);
+    */
+    // lvl4
     Wall wall3(SCREEN_WIDTH/3,150,50,SCREEN_HEIGHT);
     Wall wall4(300,540,SCREEN_WIDTH/2,50);
     Wall wall5(SCREEN_WIDTH/3,250,SCREEN_WIDTH/3+50,50);
+
+
 
 
 
@@ -596,6 +609,24 @@ int main(int argc, char* args[]) {
 
                         // Add any additional logic for transitioning back to MENU here
                     }
+                    else if (lvlTwo.isHovered && gameState == CHOOSE_LVL){
+                        // Transition back to MENU
+                        gameState = LEVEL_2;
+                        booster1.setCollected(false);
+                        ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT - 50);
+                       // ball.resetHitCount();
+
+                        // Add any additional logic for transitioning back to MENU here
+                    }
+                    else if (lvlThree.isHovered && gameState == CHOOSE_LVL){
+                        // Transition back to MENU
+                        gameState = LEVEL_3;
+                        booster1.setCollected(false);
+                        ball.setPosition(SCREEN_WIDTH-60,SCREEN_HEIGHT-55);
+                       // ball.resetHitCount();
+
+                        // Add any additional logic for transitioning back to MENU here
+                    }
                 }
             } else if (e.type == SDL_MOUSEBUTTONUP) {
                 if (e.button.button == SDL_BUTTON_LEFT && ball.isready() && gameState == LEVEL_1) {
@@ -714,7 +745,7 @@ int main(int argc, char* args[]) {
             sandSlope.draw(renderer);
             
             if (isCollision(ball.getX(), ball.getY(), ball.getRadius(), hole)) {
-                gameState = CHOOSE_LVL;
+                gameState = FINAL_SCREEN;
 
                 insertBestShots(db, 1, ball.getHitCount());
 
@@ -915,8 +946,8 @@ int main(int argc, char* args[]) {
     for(int i = 0; i < 5; i++) {
         SDL_FreeSurface(buttons[i].textSurface);
         SDL_DestroyTexture(buttons[i].textTexture);
-        SDL_FreeSurface(levels_buttons[i].textSurface);
-        SDL_DestroyTexture(levels_buttons[i].textTexture);
+        //SDL_FreeSurface(levels_buttons[i].textSurface);
+        //SDL_DestroyTexture(levels_buttons[i].textTexture);
     }
     //Mix_FreeChunk(sound);
     sqlite3_close(db);
