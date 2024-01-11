@@ -29,6 +29,7 @@ enum GameState {
     PAUSE_3, 
     PAUSE_4,
     PAUSE_5,
+    PAUSE_6,
     FINAL_SCREEN,
     FINAL_SCREEN2,
     FINAL_SCREEN3,
@@ -318,6 +319,24 @@ int main(int argc, char* args[]) {
     resume3Button.textTexture = SDL_CreateTextureFromSurface(renderer, resume3Button.textSurface);
     resume3Button.isHovered = false;
 
+    Button resume4Button;
+    resume3Button.rect = {(screenWidth - buttonWidth)/2, 550, buttonWidth, buttonHeight};
+    resume3Button.textSurface = TTF_RenderText_Solid(font, "Resume", {255, 255, 255});
+    resume3Button.textTexture = SDL_CreateTextureFromSurface(renderer, resume3Button.textSurface);
+    resume3Button.isHovered = false;
+
+    Button resume5Button;
+    resume3Button.rect = {(screenWidth - buttonWidth)/2, 550, buttonWidth, buttonHeight};
+    resume3Button.textSurface = TTF_RenderText_Solid(font, "Resume", {255, 255, 255});
+    resume3Button.textTexture = SDL_CreateTextureFromSurface(renderer, resume3Button.textSurface);
+    resume3Button.isHovered = false;
+
+    Button resume6Button;
+    resume3Button.rect = {(screenWidth - buttonWidth)/2, 550, buttonWidth, buttonHeight};
+    resume3Button.textSurface = TTF_RenderText_Solid(font, "Resume", {255, 255, 255});
+    resume3Button.textTexture = SDL_CreateTextureFromSurface(renderer, resume3Button.textSurface);
+    resume3Button.isHovered = false;
+
     Button mainMenuButton;
     mainMenuButton.rect = {(screenWidth - buttonWidth)/2,  750, buttonWidth, buttonHeight};
     mainMenuButton.textSurface = TTF_RenderText_Solid(font, "Back to Menu", {255, 255, 255});
@@ -500,42 +519,7 @@ int main(int argc, char* args[]) {
                                 
                             }                  
                         }
-                    }
-                    //for(int i = 0; i < 5; i++) {
-                    //    if (SDL_PointInRect(&point, &buttons[i].rect)) {
-                    //        buttons[i].isHovered = true;
-                    //    } else {
-                    //        buttons[i].isHovered = false;
-                    //    }
-    
-                        //std::cout << "Checking button " << i << ": " << (buttons[i].isHovered ? "Hovered!" : "Not hovered.") << std::endl;
-                    //}
-                        
-                       // lvlOne.isHovered = SDL_PointInRect(&point, &lvlOne.rect);
-                       // lvlTwo.isHovered = SDL_PointInRect(&point, &lvlTwo.rect);
-                       // lvlThree.isHovered = SDL_PointInRect(&point, &lvlThree.rect);     
-                        /*for(int i = 0; i < 5; i++) {
-                        std::cout << "Checking button " << i << ": ";
-                            if (buttons[i].isHovered) {  
-                            std::cout << "Hovered! ";
-                            if (i == 0) {
-                                std::cout << "Level 1 selected." << std::endl;
-                                // Transition to "LEVEL_1"
-                                gameState = LEVEL_1;
-                                // Initialize the game state for level 1 here
-                            } else if (i == 2) {
-                                std::cout << "Menu selected." << std::endl;
-                                gameState = MENU;
-                            } else {
-                                // Add similar conditions for other level buttons if needed
-                                std::cout << "Unknown button clicked." << std::endl;
-                            }
-                        } else {
-                            std::cout << "Not hovered." << std::endl;
-                        }
-                    }*/
-
-                    
+                    }            
                     if (pause1MenuButton.isHovered && gameState == LEVEL_1) {
                         // Transition to the PAUSE state
                         gameState = PAUSE_1;
@@ -558,10 +542,33 @@ int main(int argc, char* args[]) {
                         // Transition to the PAUSE state
                         gameState = PAUSE_3;
                     }
-                    if (resume3Button.isHovered && gameState == PAUSE_3) {
+                    if (resume3Button.isHovered && gameState == PAUSE_4) {
                         // Resume the game
-                        gameState = LEVEL_3;
-
+                        gameState = LEVEL_4;
+                    }
+                    if (pause3MenuButton.isHovered && gameState == LEVEL_4) {
+                        // Transition to the PAUSE state
+                        gameState = PAUSE_4;
+                    }
+                    if (resume3Button.isHovered && gameState == PAUSE_5) {
+                        // Resume the game
+                        gameState = LEVEL_5;
+                    }
+                    if (pause3MenuButton.isHovered && gameState == LEVEL_5) {
+                        // Transition to the PAUSE state
+                        gameState = PAUSE_5;
+                    }
+                    if (resume3Button.isHovered && gameState == PAUSE_6) {
+                        // Resume the game
+                        gameState = LEVEL_6;
+                    }
+                    if (pause3MenuButton.isHovered && gameState == LEVEL_6) {
+                        // Transition to the PAUSE state
+                        gameState = PAUSE_6;
+                    }
+                    if (resume6Button.isHovered && gameState == PAUSE_6) {
+                        // Resume the game
+                        gameState = LEVEL_6;
                     }
                     if (mainMenuButton.isHovered && (gameState == FINAL_SCREEN  ||  gameState == PAUSE_1  )) {
                         // Transition back to MENU
@@ -627,6 +634,33 @@ int main(int argc, char* args[]) {
 
                         // Add any additional logic for transitioning back to MENU here
                     }
+                    else if (lvlFour.isHovered && gameState == CHOOSE_LVL){
+                        // Transition back to MENU
+                        gameState = LEVEL_4;
+                        booster1.setCollected(false);
+                        ball.setPosition(SCREEN_WIDTH-60,SCREEN_HEIGHT-55);
+                       // ball.resetHitCount();
+
+                        // Add any additional logic for transitioning back to MENU here
+                    }
+                    else if (lvlFive.isHovered && gameState == CHOOSE_LVL){
+                        // Transition back to MENU
+                        gameState = LEVEL_5;
+                        booster1.setCollected(false);
+                        ball.setPosition(SCREEN_WIDTH-60,SCREEN_HEIGHT-55);
+                       // ball.resetHitCount();
+
+                        // Add any additional logic for transitioning back to MENU here
+                    }
+                    else if (lvlSix.isHovered && gameState == CHOOSE_LVL){
+                        // Transition back to MENU
+                        gameState = LEVEL_6;
+                        booster1.setCollected(false);
+                        ball.setPosition(SCREEN_WIDTH-60,SCREEN_HEIGHT-55);
+                       // ball.resetHitCount();
+
+                        // Add any additional logic for transitioning back to MENU here
+                    }
                 }
             } else if (e.type == SDL_MOUSEBUTTONUP) {
                 if (e.button.button == SDL_BUTTON_LEFT && ball.isready() && gameState == LEVEL_1) {
@@ -677,6 +711,55 @@ int main(int argc, char* args[]) {
                         ball.increaseHitCount();
                     std::cout << ball.getHitCount() << "\n";
                 }
+                else if (e.button.button == SDL_BUTTON_LEFT && ball.isready() && gameState == LEVEL_4) {
+                    isDragging = false;
+                    mouseX = e.motion.x;
+                    mouseY = e.motion.y;
+                    deltaX = mouseX - prevMouseX;
+                    deltaY = mouseY - prevMouseY;
+                    std::cout << deltaX << " deltaX \n";
+                    std::cout << deltaY << " deltaY \n";
+                    float xVelocity = static_cast<float>(deltaX) / SCREEN_WIDTH;
+                    float yVelocity = static_cast<float>(deltaY) / SCREEN_HEIGHT;
+                    ball.setAcceleration(xVelocity, yVelocity, 0.0);
+                    ball.setVelocity(xVelocity, yVelocity, 0.0);
+                    if (xVelocity != 0 && yVelocity != 0)
+                        ball.increaseHitCount();
+                    std::cout << ball.getHitCount() << "\n";
+                }
+                else if (e.button.button == SDL_BUTTON_LEFT && ball.isready() && gameState == LEVEL_5) {
+                    isDragging = false;
+                    mouseX = e.motion.x;
+                    mouseY = e.motion.y;
+                    deltaX = mouseX - prevMouseX;
+                    deltaY = mouseY - prevMouseY;
+                    std::cout << deltaX << " deltaX \n";
+                    std::cout << deltaY << " deltaY \n";
+                    float xVelocity = static_cast<float>(deltaX) / SCREEN_WIDTH;
+                    float yVelocity = static_cast<float>(deltaY) / SCREEN_HEIGHT;
+                    ball.setAcceleration(xVelocity, yVelocity, 0.0);
+                    ball.setVelocity(xVelocity, yVelocity, 0.0);
+                    if (xVelocity != 0 && yVelocity != 0)
+                        ball.increaseHitCount();
+                    std::cout << ball.getHitCount() << "\n";
+                }
+                else if (e.button.button == SDL_BUTTON_LEFT && ball.isready() && gameState == LEVEL_6) {
+                    isDragging = false;
+                    mouseX = e.motion.x;
+                    mouseY = e.motion.y;
+                    deltaX = mouseX - prevMouseX;
+                    deltaY = mouseY - prevMouseY;
+                    std::cout << deltaX << " deltaX \n";
+                    std::cout << deltaY << " deltaY \n";
+                    float xVelocity = static_cast<float>(deltaX) / SCREEN_WIDTH;
+                    float yVelocity = static_cast<float>(deltaY) / SCREEN_HEIGHT;
+                    ball.setAcceleration(xVelocity, yVelocity, 0.0);
+                    ball.setVelocity(xVelocity, yVelocity, 0.0);
+                    if (xVelocity != 0 && yVelocity != 0)
+                        ball.increaseHitCount();
+                    std::cout << ball.getHitCount() << "\n";
+                }
+
               
             }
         }
@@ -840,6 +923,108 @@ int main(int argc, char* args[]) {
             SDL_RenderFillRect(renderer, &pause3MenuButton.rect);
             SDL_RenderCopy(renderer, pause3MenuButton.textTexture, NULL, &pause3MenuButton.rect);
         }
+        else if (gameState == LEVEL_4) {
+                hole.x = SCREEN_WIDTH/5 ;/* X-coordinate of the hole */;
+                hole.y = SCREEN_HEIGHT-50 ;/* Y-coordinate of the hole */;
+                hole.radius = 15 ;
+            //gameState = LEVEL_1;
+            //ball.resetHitCount();
+            //ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT - 50);
+
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall3);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall4);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall5);
+            if (isCollision(ball.getX(), ball.getY(), ball.getRadius(), hole)) {
+                gameState = FINAL_SCREEN4;
+
+                insertBestShots(db, 4, ball.getHitCount());
+
+                int bestShots = getBestShots(db, 4);
+               // std::cout << "Best shots for Level 2: " <<bestShots<<std::endl;
+            }
+            ball.move();
+
+            // Draw the hole
+            filledCircleColor(renderer, hole.x, hole.y, hole.radius, 0xFF0000FF);
+            wall3.draw(renderer);
+            wall4.draw(renderer);
+            wall5.draw(renderer);
+            // Draw the ball after the hole to ensure it's not covered
+            ball.draw(renderer);
+            
+
+            SDL_SetRenderDrawColor(renderer, pause3MenuButton.isHovered ? 0 : 0, 0, 255, 125);
+            SDL_RenderFillRect(renderer, &pause3MenuButton.rect);
+            SDL_RenderCopy(renderer, pause3MenuButton.textTexture, NULL, &pause3MenuButton.rect);
+        }
+        else if (gameState == LEVEL_5) {
+                hole.x = SCREEN_WIDTH/5 ;/* X-coordinate of the hole */;
+                hole.y = SCREEN_HEIGHT-50 ;/* Y-coordinate of the hole */;
+                hole.radius = 15 ;
+            //gameState = LEVEL_1;
+            //ball.resetHitCount();
+            //ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT - 50);
+
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall3);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall4);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall5);
+            if (isCollision(ball.getX(), ball.getY(), ball.getRadius(), hole)) {
+                gameState = FINAL_SCREEN5;
+
+                insertBestShots(db, 5, ball.getHitCount());
+
+                int bestShots = getBestShots(db, 5);
+               // std::cout << "Best shots for Level 2: " <<bestShots<<std::endl;
+            }
+            ball.move();
+
+            // Draw the hole
+            filledCircleColor(renderer, hole.x, hole.y, hole.radius, 0xFF0000FF);
+            wall3.draw(renderer);
+            wall4.draw(renderer);
+            wall5.draw(renderer);
+            // Draw the ball after the hole to ensure it's not covered
+            ball.draw(renderer);
+            
+
+            SDL_SetRenderDrawColor(renderer, pause3MenuButton.isHovered ? 0 : 0, 0, 255, 125);
+            SDL_RenderFillRect(renderer, &pause3MenuButton.rect);
+            SDL_RenderCopy(renderer, pause3MenuButton.textTexture, NULL, &pause3MenuButton.rect);
+        }
+        else if (gameState == LEVEL_6) {
+                hole.x = SCREEN_WIDTH/5 ;/* X-coordinate of the hole */;
+                hole.y = SCREEN_HEIGHT-50 ;/* Y-coordinate of the hole */;
+                hole.radius = 15 ;
+            //gameState = LEVEL_1;
+            //ball.resetHitCount();
+            //ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT - 50);
+
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall3);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall4);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall5);
+            if (isCollision(ball.getX(), ball.getY(), ball.getRadius(), hole)) {
+                gameState = FINAL_SCREEN6;
+
+                insertBestShots(db, 6, ball.getHitCount());
+
+                int bestShots = getBestShots(db, 6);
+               // std::cout << "Best shots for Level 2: " <<bestShots<<std::endl;
+            }
+            ball.move();
+
+            // Draw the hole
+            filledCircleColor(renderer, hole.x, hole.y, hole.radius, 0xFF0000FF);
+            wall3.draw(renderer);
+            wall4.draw(renderer);
+            wall5.draw(renderer);
+            // Draw the ball after the hole to ensure it's not covered
+            ball.draw(renderer);
+            
+
+            SDL_SetRenderDrawColor(renderer, pause3MenuButton.isHovered ? 0 : 0, 0, 255, 125);
+            SDL_RenderFillRect(renderer, &pause3MenuButton.rect);
+            SDL_RenderCopy(renderer, pause3MenuButton.textTexture, NULL, &pause3MenuButton.rect);
+        }
 
         else if (gameState == PAUSE_1) {
             // Display the pause screen and buttons
@@ -883,6 +1068,48 @@ int main(int argc, char* args[]) {
             SDL_RenderFillRect(renderer, &mainMenuButton.rect);
             SDL_RenderCopy(renderer, mainMenuButton.textTexture, NULL, &mainMenuButton.rect);
         }
+        else if (gameState == PAUSE_4) {
+            // Display the pause screen and buttons
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 128);  // Semi-transparent black background
+            SDL_Rect pauseRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+            SDL_RenderFillRect(renderer, &pauseRect);
+
+            SDL_SetRenderDrawColor(renderer, resume4Button.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &resume4Button.rect);
+            SDL_RenderCopy(renderer, resume4Button.textTexture, NULL, &resume4Button.rect);
+
+            SDL_SetRenderDrawColor(renderer, mainMenuButton.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &mainMenuButton.rect);
+            SDL_RenderCopy(renderer, mainMenuButton.textTexture, NULL, &mainMenuButton.rect);
+        }
+        else if (gameState == PAUSE_5) {
+            // Display the pause screen and buttons
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 128);  // Semi-transparent black background
+            SDL_Rect pauseRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+            SDL_RenderFillRect(renderer, &pauseRect);
+
+            SDL_SetRenderDrawColor(renderer, resume5Button.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &resume5Button.rect);
+            SDL_RenderCopy(renderer, resume5Button.textTexture, NULL, &resume5Button.rect);
+
+            SDL_SetRenderDrawColor(renderer, mainMenuButton.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &mainMenuButton.rect);
+            SDL_RenderCopy(renderer, mainMenuButton.textTexture, NULL, &mainMenuButton.rect);
+        }
+        else if (gameState == PAUSE_6) {
+            // Display the pause screen and buttons
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 128);  // Semi-transparent black background
+            SDL_Rect pauseRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+            SDL_RenderFillRect(renderer, &pauseRect);
+
+            SDL_SetRenderDrawColor(renderer, resume6Button.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &resume6Button.rect);
+            SDL_RenderCopy(renderer, resume6Button.textTexture, NULL, &resume6Button.rect);
+
+            SDL_SetRenderDrawColor(renderer, mainMenuButton.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &mainMenuButton.rect);
+            SDL_RenderCopy(renderer, mainMenuButton.textTexture, NULL, &mainMenuButton.rect);
+        }
         else if (gameState == FINAL_SCREEN) {
             // Render the final screen
             std::string endText = "Shots: " + std::to_string(ball.getHitCount())+" Your best result: " + std::to_string(getBestShots(db,1));
@@ -916,6 +1143,51 @@ int main(int argc, char* args[]) {
         else if (gameState == FINAL_SCREEN3) {
             // Render the final screen
             std::string endText = "Shots: " + std::to_string(ball.getHitCount())+" Your best result: " + std::to_string(getBestShots(db,3));
+            SDL_Surface* endSurface = TTF_RenderText_Solid(font, endText.c_str(), {255, 255, 255});
+            SDL_Texture* endTexture = SDL_CreateTextureFromSurface(renderer, endSurface);
+            SDL_Rect endRect = {(SCREEN_WIDTH - endSurface->w) / 2, (SCREEN_HEIGHT - endSurface->h) / 2, endSurface->w, endSurface->h};
+            SDL_RenderCopy(renderer, endTexture, NULL, &endRect);
+            SDL_FreeSurface(endSurface);
+            SDL_DestroyTexture(endTexture);
+
+            // Add a "Back to Menu" button
+            SDL_SetRenderDrawColor(renderer, mainMenuButton.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &mainMenuButton.rect);
+            SDL_RenderCopy(renderer, mainMenuButton.textTexture, NULL, &mainMenuButton.rect);
+        }
+        else if (gameState == FINAL_SCREEN4) {
+            // Render the final screen
+            std::string endText = "Shots: " + std::to_string(ball.getHitCount())+" Your best result: " + std::to_string(getBestShots(db,4));
+            SDL_Surface* endSurface = TTF_RenderText_Solid(font, endText.c_str(), {255, 255, 255});
+            SDL_Texture* endTexture = SDL_CreateTextureFromSurface(renderer, endSurface);
+            SDL_Rect endRect = {(SCREEN_WIDTH - endSurface->w) / 2, (SCREEN_HEIGHT - endSurface->h) / 2, endSurface->w, endSurface->h};
+            SDL_RenderCopy(renderer, endTexture, NULL, &endRect);
+            SDL_FreeSurface(endSurface);
+            SDL_DestroyTexture(endTexture);
+
+            // Add a "Back to Menu" button
+            SDL_SetRenderDrawColor(renderer, mainMenuButton.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &mainMenuButton.rect);
+            SDL_RenderCopy(renderer, mainMenuButton.textTexture, NULL, &mainMenuButton.rect);
+        }
+        else if (gameState == FINAL_SCREEN5) {
+            // Render the final screen
+            std::string endText = "Shots: " + std::to_string(ball.getHitCount())+" Your best result: " + std::to_string(getBestShots(db,5));
+            SDL_Surface* endSurface = TTF_RenderText_Solid(font, endText.c_str(), {255, 255, 255});
+            SDL_Texture* endTexture = SDL_CreateTextureFromSurface(renderer, endSurface);
+            SDL_Rect endRect = {(SCREEN_WIDTH - endSurface->w) / 2, (SCREEN_HEIGHT - endSurface->h) / 2, endSurface->w, endSurface->h};
+            SDL_RenderCopy(renderer, endTexture, NULL, &endRect);
+            SDL_FreeSurface(endSurface);
+            SDL_DestroyTexture(endTexture);
+
+            // Add a "Back to Menu" button
+            SDL_SetRenderDrawColor(renderer, mainMenuButton.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &mainMenuButton.rect);
+            SDL_RenderCopy(renderer, mainMenuButton.textTexture, NULL, &mainMenuButton.rect);
+        }
+        else if (gameState == FINAL_SCREEN6) {
+            // Render the final screen
+            std::string endText = "Shots: " + std::to_string(ball.getHitCount())+" Your best result: " + std::to_string(getBestShots(db,6));
             SDL_Surface* endSurface = TTF_RenderText_Solid(font, endText.c_str(), {255, 255, 255});
             SDL_Texture* endTexture = SDL_CreateTextureFromSurface(renderer, endSurface);
             SDL_Rect endRect = {(SCREEN_WIDTH - endSurface->w) / 2, (SCREEN_HEIGHT - endSurface->h) / 2, endSurface->w, endSurface->h};
