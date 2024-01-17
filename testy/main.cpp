@@ -12,8 +12,8 @@
 #include "Sand.h"   
 const float FRICTION = 0.95;
 
-#define SCREEN_WIDTH 500
-#define SCREEN_HEIGHT 900
+#define SCREEN_WIDTH 720
+#define SCREEN_HEIGHT 1000
 
 enum GameState {
     MENU,
@@ -207,10 +207,8 @@ int main(int argc, char* args[]) {
         std::cerr << "Cannot open database: " << sqlite3_errmsg(db) << std::endl;
         return rc;
     }
-
-    initializeDatabase(db,1);
-    initializeDatabase(db,2);
-    initializeDatabase(db,3);
+    for (int i=0; i<=6; i++)
+        initializeDatabase(db,i);
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
 
@@ -245,8 +243,8 @@ int main(int argc, char* args[]) {
     const int screenWidth = SCREEN_WIDTH;
     Button buttons[5];
     Button levels_buttons[6];
-    //newbutton
-    for(int i = 0; i <= 4; i++) {
+    //newbutton idk why i can make buttons[i] but cant make any more buttons in for bc cant access them later (?)
+    for(int i = 0; i <= 3; i++) {
         buttons[i].rect = {(screenWidth - buttonWidth)/2, i*100+100, buttonWidth, buttonHeight};
         //name the buttons
         if ( i==0 )
@@ -294,12 +292,28 @@ int main(int argc, char* args[]) {
     pause2MenuButton.textTexture = SDL_CreateTextureFromSurface(renderer, pause2MenuButton.textSurface);
     pause2MenuButton.isHovered = false;
 
-        Button pause3MenuButton;
+    Button pause3MenuButton;
     pause3MenuButton.rect = {SCREEN_WIDTH - buttonWidth - 50, 25, buttonWidth, buttonHeight};
     pause3MenuButton.textSurface = TTF_RenderText_Solid(font, "Pause", {255, 255, 255});
     pause3MenuButton.textTexture = SDL_CreateTextureFromSurface(renderer, pause3MenuButton.textSurface);
     pause3MenuButton.isHovered = false;
 
+    Button pause4MenuButton;
+    pause4MenuButton.rect = {SCREEN_WIDTH - buttonWidth - 50, 25, buttonWidth, buttonHeight};
+    pause4MenuButton.textSurface = TTF_RenderText_Solid(font, "Pause", {255, 255, 255});
+    pause4MenuButton.textTexture = SDL_CreateTextureFromSurface(renderer, pause4MenuButton.textSurface);
+    pause4MenuButton.isHovered = false;
+
+    Button pause5MenuButton;
+    pause5MenuButton.rect = {SCREEN_WIDTH - buttonWidth +50, 25, buttonWidth-30, buttonHeight};
+    pause5MenuButton.textSurface = TTF_RenderText_Solid(font, "Pause", {255, 255, 255});
+    pause5MenuButton.textTexture = SDL_CreateTextureFromSurface(renderer, pause5MenuButton.textSurface);
+    pause5MenuButton.isHovered = false;
+    Button pause6MenuButton;
+    pause6MenuButton.rect = {SCREEN_WIDTH - buttonWidth - 50, 25, buttonWidth, buttonHeight};
+    pause6MenuButton.textSurface = TTF_RenderText_Solid(font, "Pause", {255, 255, 255});
+    pause6MenuButton.textTexture = SDL_CreateTextureFromSurface(renderer, pause6MenuButton.textSurface);
+    pause6MenuButton.isHovered = false;
     // Create the "Resume" and "Back to Menu" buttons for the pause screen
     Button resume1Button;
     resume1Button.rect = {(screenWidth - buttonWidth)/2, 550, buttonWidth, buttonHeight};
@@ -320,22 +334,22 @@ int main(int argc, char* args[]) {
     resume3Button.isHovered = false;
 
     Button resume4Button;
-    resume3Button.rect = {(screenWidth - buttonWidth)/2, 550, buttonWidth, buttonHeight};
-    resume3Button.textSurface = TTF_RenderText_Solid(font, "Resume", {255, 255, 255});
-    resume3Button.textTexture = SDL_CreateTextureFromSurface(renderer, resume3Button.textSurface);
-    resume3Button.isHovered = false;
+    resume4Button.rect = {(screenWidth - buttonWidth)/2, 550, buttonWidth, buttonHeight};
+    resume4Button.textSurface = TTF_RenderText_Solid(font, "Resume", {255, 255, 255});
+    resume4Button.textTexture = SDL_CreateTextureFromSurface(renderer, resume4Button.textSurface);
+    resume4Button.isHovered = false;
 
     Button resume5Button;
-    resume3Button.rect = {(screenWidth - buttonWidth)/2, 550, buttonWidth, buttonHeight};
-    resume3Button.textSurface = TTF_RenderText_Solid(font, "Resume", {255, 255, 255});
-    resume3Button.textTexture = SDL_CreateTextureFromSurface(renderer, resume3Button.textSurface);
-    resume3Button.isHovered = false;
+    resume5Button.rect = {(screenWidth - buttonWidth)/2, 550, buttonWidth, buttonHeight};
+    resume5Button.textSurface = TTF_RenderText_Solid(font, "Resume", {255, 255, 255});
+    resume5Button.textTexture = SDL_CreateTextureFromSurface(renderer, resume5Button.textSurface);
+    resume5Button.isHovered = false;
 
     Button resume6Button;
-    resume3Button.rect = {(screenWidth - buttonWidth)/2, 550, buttonWidth, buttonHeight};
-    resume3Button.textSurface = TTF_RenderText_Solid(font, "Resume", {255, 255, 255});
-    resume3Button.textTexture = SDL_CreateTextureFromSurface(renderer, resume3Button.textSurface);
-    resume3Button.isHovered = false;
+    resume6Button.rect = {(screenWidth - buttonWidth)/2, 550, buttonWidth, buttonHeight};
+    resume6Button.textSurface = TTF_RenderText_Solid(font, "Resume", {255, 255, 255});
+    resume6Button.textTexture = SDL_CreateTextureFromSurface(renderer, resume6Button.textSurface);
+    resume6Button.isHovered = false;
 
     Button mainMenuButton;
     mainMenuButton.rect = {(screenWidth - buttonWidth)/2,  750, buttonWidth, buttonHeight};
@@ -391,31 +405,36 @@ int main(int argc, char* args[]) {
     bool quit = false;
 
 
-    Sand sandSlope(500, 500, SCREEN_WIDTH/2, 300);
+    //Sand sandSlope(5, 5, SCREEN_WIDTH/2, 300);
     // lvl1
-    Booster booster1(10,SCREEN_WIDTH/3,SCREEN_HEIGHT-100);
-
+    Booster booster1(10,SCREEN_WIDTH/4,SCREEN_HEIGHT/2);
+    Booster booster2(10,(SCREEN_WIDTH*3)/4,SCREEN_HEIGHT/2);  
+    Booster booster3(10,(SCREEN_WIDTH-50),SCREEN_HEIGHT/2);  
+    Booster booster4(10,(SCREEN_WIDTH+50)/2,SCREEN_HEIGHT/2);  
+    //Booster booster2(10,(SCREEN_WIDTH*3)/4,SCREEN_HEIGHT/2);  
     // lvl2// wall is posx posy widthx widthy
-    Wall wall1(0,350,SCREEN_WIDTH/2,50);
-    Wall wall2(250,650,SCREEN_WIDTH/2,50);
+    Wall wall1(0,350,(SCREEN_WIDTH*3)/4,50);
+    Wall wall2(SCREEN_WIDTH/3,650,SCREEN_WIDTH,50);
 
+    
+    //lvl4
+    Wall wall6(100,0,50,SCREEN_HEIGHT-150);
+    Wall wall7(150,SCREEN_HEIGHT-200,SCREEN_WIDTH/4,50);
+    Wall wall8(250+(SCREEN_WIDTH/4),100,50,SCREEN_HEIGHT);
+    Wall wall9(100+(SCREEN_WIDTH/4),0,50,SCREEN_HEIGHT-150);
+    Wall wall10(450,100,SCREEN_WIDTH/4,50);
+    Wall wall11(400+(SCREEN_WIDTH/4),100,50,SCREEN_HEIGHT-200);
+    //Wall wall11(150+(SCREEN_WIDTH/2),SCREEN_HEIGHT-200,-50,-SCREEN_HEIGHT);
+    
+    // lvl
+    Wall wall3(SCREEN_WIDTH/4,150,50,SCREEN_HEIGHT);
+    Wall wall4(400,540,SCREEN_WIDTH,50);
+    Wall wall5((SCREEN_WIDTH/3)-20,220,SCREEN_WIDTH/2,50);
 
+    //lvl5
+    Wall wall12((SCREEN_WIDTH-25)/2,SCREEN_HEIGHT/5,50,SCREEN_HEIGHT/2);
 
-
-    /*
-    lvl3
-    Wall wall6(SCREEN_WIDTH/3,150,50,SCREEN_HEIGHT);
-    Wall wall7(300,540,SCREEN_WIDTH/2,50);
-    Wall wall8(SCREEN_WIDTH/3,250,SCREEN_WIDTH/3+50,50);
-    Wall wall(SCREEN_WIDTH/3,250,SCREEN_WIDTH/3+50,50);
-    */
-    // lvl4
-    Wall wall3(SCREEN_WIDTH/3,150,50,SCREEN_HEIGHT);
-    Wall wall4(300,540,SCREEN_WIDTH/2,50);
-    Wall wall5(SCREEN_WIDTH/3,250,SCREEN_WIDTH/3+50,50);
-
-
-
+    //lvl6
 
 
     Wall empty(0,0,0,0);
@@ -453,6 +472,12 @@ int main(int argc, char* args[]) {
                 mainMenuButton.isHovered = SDL_PointInRect(&point, &mainMenuButton.rect);
                 resume3Button.isHovered = SDL_PointInRect(&point, &resume3Button.rect);
                 pause3MenuButton.isHovered = SDL_PointInRect(&point, &pause3MenuButton.rect);
+                resume6Button.isHovered = SDL_PointInRect(&point, &resume6Button.rect);
+                pause4MenuButton.isHovered = SDL_PointInRect(&point, &pause4MenuButton.rect);
+                resume4Button.isHovered = SDL_PointInRect(&point, &resume4Button.rect);
+                pause5MenuButton.isHovered = SDL_PointInRect(&point, &pause5MenuButton.rect);
+                resume5Button.isHovered = SDL_PointInRect(&point, &resume5Button.rect);
+                pause6MenuButton.isHovered = SDL_PointInRect(&point, &pause6MenuButton.rect);
                 lvlOne.isHovered = SDL_PointInRect(&point, &lvlOne.rect);
                 lvlThree.isHovered = SDL_PointInRect(&point, &lvlThree.rect);
                 lvlTwo.isHovered = SDL_PointInRect(&point, &lvlTwo.rect);
@@ -496,9 +521,8 @@ int main(int argc, char* args[]) {
                             }
                             else if (i == 3)
                             {
-                                for(int i=1; i<=3; i++)
+                                for(int i=1; i<=6; i++)
                                 { 
-                                
                                 resetRecords(db, i);
                                 }
 
@@ -542,34 +566,35 @@ int main(int argc, char* args[]) {
                         // Transition to the PAUSE state
                         gameState = PAUSE_3;
                     }
-                    if (resume3Button.isHovered && gameState == PAUSE_4) {
+                    if (resume3Button.isHovered && gameState == PAUSE_3) {
+                        // Resume the game
+                        gameState = LEVEL_3;
+                    }
+                    if (resume4Button.isHovered && gameState == PAUSE_4) {
                         // Resume the game
                         gameState = LEVEL_4;
                     }
-                    if (pause3MenuButton.isHovered && gameState == LEVEL_4) {
+                    if (pause4MenuButton.isHovered && gameState == LEVEL_4) {
                         // Transition to the PAUSE state
                         gameState = PAUSE_4;
                     }
-                    if (resume3Button.isHovered && gameState == PAUSE_5) {
+                    if (resume5Button.isHovered && gameState == PAUSE_5) {
                         // Resume the game
                         gameState = LEVEL_5;
                     }
-                    if (pause3MenuButton.isHovered && gameState == LEVEL_5) {
+                    if (pause5MenuButton.isHovered && gameState == LEVEL_5) {
                         // Transition to the PAUSE state
                         gameState = PAUSE_5;
-                    }
-                    if (resume3Button.isHovered && gameState == PAUSE_6) {
-                        // Resume the game
-                        gameState = LEVEL_6;
-                    }
-                    if (pause3MenuButton.isHovered && gameState == LEVEL_6) {
-                        // Transition to the PAUSE state
-                        gameState = PAUSE_6;
                     }
                     if (resume6Button.isHovered && gameState == PAUSE_6) {
                         // Resume the game
                         gameState = LEVEL_6;
                     }
+                    if (pause6MenuButton.isHovered && gameState == LEVEL_6) {
+                        // Transition to the PAUSE state
+                        gameState = PAUSE_6;
+                    }
+
                     if (mainMenuButton.isHovered && (gameState == FINAL_SCREEN  ||  gameState == PAUSE_1  )) {
                         // Transition back to MENU
                         gameState = MENU;
@@ -593,6 +618,39 @@ int main(int argc, char* args[]) {
                         // Add any additional logic for transitioning back to MENU here
                     }
                     else if (mainMenuButton.isHovered &&(gameState == FINAL_SCREEN3 || gameState == PAUSE_3)){
+                        // Transition back to MENU
+                        gameState = MENU;
+                        ball.setAcceleration(0, 0, 0.0);
+                        ball.setVelocity(0, 0, 0.0);
+                        ball.setPosition(SCREEN_WIDTH-25, SCREEN_HEIGHT - 50);
+                        ball.resetHitCount();
+                       // ball.resetHitCount();
+
+                        // Add any additional logic for transitioning back to MENU here
+                    }
+                    else if (mainMenuButton.isHovered &&(gameState == FINAL_SCREEN4 || gameState == PAUSE_4)){
+                        // Transition back to MENU
+                        gameState = MENU;
+                        ball.setAcceleration(0, 0, 0.0);
+                        ball.setVelocity(0, 0, 0.0);
+                        ball.setPosition(SCREEN_WIDTH-25, SCREEN_HEIGHT - 50);
+                        ball.resetHitCount();
+                       // ball.resetHitCount();
+
+                        // Add any additional logic for transitioning back to MENU here
+                    }
+                    else if (mainMenuButton.isHovered &&(gameState == FINAL_SCREEN5 || gameState == PAUSE_5)){
+                        // Transition back to MENU
+                        gameState = MENU;
+                        ball.setAcceleration(0, 0, 0.0);
+                        ball.setVelocity(0, 0, 0.0);
+                        ball.setPosition(SCREEN_WIDTH-25, SCREEN_HEIGHT - 50);
+                        ball.resetHitCount();
+                       // ball.resetHitCount();
+
+                        // Add any additional logic for transitioning back to MENU here
+                    }
+                    else if (mainMenuButton.isHovered &&(gameState == FINAL_SCREEN6 || gameState == PAUSE_6)){
                         // Transition back to MENU
                         gameState = MENU;
                         ball.setAcceleration(0, 0, 0.0);
@@ -638,7 +696,8 @@ int main(int argc, char* args[]) {
                         // Transition back to MENU
                         gameState = LEVEL_4;
                         booster1.setCollected(false);
-                        ball.setPosition(SCREEN_WIDTH-60,SCREEN_HEIGHT-55);
+                        ball.setPosition((SCREEN_WIDTH+25)/2,SCREEN_HEIGHT-55);
+                        
                        // ball.resetHitCount();
 
                         // Add any additional logic for transitioning back to MENU here
@@ -647,7 +706,7 @@ int main(int argc, char* args[]) {
                         // Transition back to MENU
                         gameState = LEVEL_5;
                         booster1.setCollected(false);
-                        ball.setPosition(SCREEN_WIDTH-60,SCREEN_HEIGHT-55);
+                        ball.setPosition(50,SCREEN_HEIGHT/7);
                        // ball.resetHitCount();
 
                         // Add any additional logic for transitioning back to MENU here
@@ -655,6 +714,15 @@ int main(int argc, char* args[]) {
                     else if (lvlSix.isHovered && gameState == CHOOSE_LVL){
                         // Transition back to MENU
                         gameState = LEVEL_6;
+                        booster1.setCollected(false);
+                        ball.setPosition(SCREEN_WIDTH-60,SCREEN_HEIGHT-55);
+                       // ball.resetHitCount();
+
+                        // Add any additional logic for transitioning back to MENU here
+                    }
+                    else if (mainMenuButton.isHovered && gameState == CHOOSE_LVL){
+                        // Transition back to MENU
+                        gameState = MENU;
                         booster1.setCollected(false);
                         ball.setPosition(SCREEN_WIDTH-60,SCREEN_HEIGHT-55);
                        // ball.resetHitCount();
@@ -822,10 +890,10 @@ int main(int argc, char* args[]) {
 
             ball.handleBoosterCollision(booster1);
             //ball.handleCollision(SCREEN_WIDTH,SCREEN_HEIGHT, sandSlope);
-            ball.handleSlopeCollision(sandSlope);
+            //ball.handleSlopeCollision(sandSlope);
             ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, empty);
             SDL_SetRenderDrawColor(renderer, 255, 204, 102, 255); // Sand color (adjust as needed)
-            sandSlope.draw(renderer);
+            
             
             if (isCollision(ball.getX(), ball.getY(), ball.getRadius(), hole)) {
                 gameState = FINAL_SCREEN;
@@ -840,15 +908,15 @@ int main(int argc, char* args[]) {
             // Draw the hole
             
             filledCircleColor(renderer, hole.x, hole.y, hole.radius, 0xFF0000FF);
+            
             //filledCircleColor(renderer, hole.x, hole.y, hole.radius, 0xFF0000FF);
 
             //wall1.draw(renderer);
             //wall2.draw(renderer);
             // Draw the ball after the hole to ensure it's not covered
             ball.draw(renderer);
+            //sandSlope.draw(renderer);
 
-            if (!booster1.isCollected())
-                booster1.draw(renderer);
            
             SDL_SetRenderDrawColor(renderer, pause1MenuButton.isHovered ? 0 : 0, 0, 255, 125);
             SDL_RenderFillRect(renderer, &pause1MenuButton.rect);
@@ -890,7 +958,7 @@ int main(int argc, char* args[]) {
             SDL_RenderCopy(renderer, pause2MenuButton.textTexture, NULL, &pause2MenuButton.rect);
         }
         else if (gameState == LEVEL_3) {
-                hole.x = SCREEN_WIDTH/5 ;/* X-coordinate of the hole */;
+                hole.x = SCREEN_WIDTH/6 ;/* X-coordinate of the hole */;
                 hole.y = SCREEN_HEIGHT-50 ;/* Y-coordinate of the hole */;
                 hole.radius = 15 ;
             //gameState = LEVEL_1;
@@ -923,17 +991,20 @@ int main(int argc, char* args[]) {
             SDL_RenderFillRect(renderer, &pause3MenuButton.rect);
             SDL_RenderCopy(renderer, pause3MenuButton.textTexture, NULL, &pause3MenuButton.rect);
         }
-        else if (gameState == LEVEL_4) {
-                hole.x = SCREEN_WIDTH/5 ;/* X-coordinate of the hole */;
-                hole.y = SCREEN_HEIGHT-50 ;/* Y-coordinate of the hole */;
+        else if (gameState == LEVEL_5) {
+                hole.x = SCREEN_WIDTH*3/4 ;/* X-coordinate of the hole */;
+                hole.y = (SCREEN_HEIGHT+20)/6 ;/* Y-coordinate of the hole */;
                 hole.radius = 15 ;
             //gameState = LEVEL_1;
             //ball.resetHitCount();
             //ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT - 50);
-
-            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall3);
-            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall4);
-            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall5);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall6);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall7);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall8);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall9);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall10);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall11);
+            
             if (isCollision(ball.getX(), ball.getY(), ball.getRadius(), hole)) {
                 gameState = FINAL_SCREEN4;
 
@@ -943,31 +1014,38 @@ int main(int argc, char* args[]) {
                // std::cout << "Best shots for Level 2: " <<bestShots<<std::endl;
             }
             ball.move();
-
+            if (!booster4.isCollected())
+                booster4.draw(renderer);   
+            if (!booster3.isCollected())
+                booster3.draw(renderer); 
+            ball.handleBoosterCollision(booster4);
+            ball.handleBoosterCollision(booster3);
             // Draw the hole
             filledCircleColor(renderer, hole.x, hole.y, hole.radius, 0xFF0000FF);
-            wall3.draw(renderer);
-            wall4.draw(renderer);
-            wall5.draw(renderer);
+            wall6.draw(renderer);
+            wall7.draw(renderer);
+            wall8.draw(renderer);
+            wall9.draw(renderer);
+            wall10.draw(renderer);
+            wall11.draw(renderer);
             // Draw the ball after the hole to ensure it's not covered
             ball.draw(renderer);
             
 
-            SDL_SetRenderDrawColor(renderer, pause3MenuButton.isHovered ? 0 : 0, 0, 255, 125);
-            SDL_RenderFillRect(renderer, &pause3MenuButton.rect);
-            SDL_RenderCopy(renderer, pause3MenuButton.textTexture, NULL, &pause3MenuButton.rect);
+            SDL_SetRenderDrawColor(renderer, pause5MenuButton.isHovered ? 0 : 0, 0, 255, 125);
+            SDL_RenderFillRect(renderer, &pause5MenuButton.rect);
+            SDL_RenderCopy(renderer, pause5MenuButton.textTexture, NULL, &pause5MenuButton.rect);
         }
-        else if (gameState == LEVEL_5) {
-                hole.x = SCREEN_WIDTH/5 ;/* X-coordinate of the hole */;
-                hole.y = SCREEN_HEIGHT-50 ;/* Y-coordinate of the hole */;
+        else if (gameState == LEVEL_4) {
+                hole.x = (SCREEN_WIDTH+25)/2 ;/* X-coordinate of the hole */;
+                hole.y = 100 ;/* Y-coordinate of the hole */;
                 hole.radius = 15 ;
             //gameState = LEVEL_1;
             //ball.resetHitCount();
             //ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT - 50);
 
-            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall3);
-            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall4);
-            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall5);
+           
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall12);
             if (isCollision(ball.getX(), ball.getY(), ball.getRadius(), hole)) {
                 gameState = FINAL_SCREEN5;
 
@@ -977,19 +1055,22 @@ int main(int argc, char* args[]) {
                // std::cout << "Best shots for Level 2: " <<bestShots<<std::endl;
             }
             ball.move();
-
+            ball.handleBoosterCollision(booster1);
+            ball.handleBoosterCollision(booster2);
             // Draw the hole
             filledCircleColor(renderer, hole.x, hole.y, hole.radius, 0xFF0000FF);
-            wall3.draw(renderer);
-            wall4.draw(renderer);
-            wall5.draw(renderer);
+            if (!booster1.isCollected())
+                booster1.draw(renderer);   
+            if (!booster2.isCollected())
+                booster2.draw(renderer);   
+            wall12.draw(renderer);
             // Draw the ball after the hole to ensure it's not covered
             ball.draw(renderer);
             
 
-            SDL_SetRenderDrawColor(renderer, pause3MenuButton.isHovered ? 0 : 0, 0, 255, 125);
-            SDL_RenderFillRect(renderer, &pause3MenuButton.rect);
-            SDL_RenderCopy(renderer, pause3MenuButton.textTexture, NULL, &pause3MenuButton.rect);
+            SDL_SetRenderDrawColor(renderer, pause4MenuButton.isHovered ? 0 : 0, 0, 255, 125);
+            SDL_RenderFillRect(renderer, &pause4MenuButton.rect);
+            SDL_RenderCopy(renderer, pause4MenuButton.textTexture, NULL, &pause4MenuButton.rect);
         }
         else if (gameState == LEVEL_6) {
                 hole.x = SCREEN_WIDTH/5 ;/* X-coordinate of the hole */;
@@ -1021,9 +1102,9 @@ int main(int argc, char* args[]) {
             ball.draw(renderer);
             
 
-            SDL_SetRenderDrawColor(renderer, pause3MenuButton.isHovered ? 0 : 0, 0, 255, 125);
-            SDL_RenderFillRect(renderer, &pause3MenuButton.rect);
-            SDL_RenderCopy(renderer, pause3MenuButton.textTexture, NULL, &pause3MenuButton.rect);
+            SDL_SetRenderDrawColor(renderer, pause6MenuButton.isHovered ? 0 : 0, 0, 255, 125);
+            SDL_RenderFillRect(renderer, &pause6MenuButton.rect);
+            SDL_RenderCopy(renderer, pause6MenuButton.textTexture, NULL, &pause6MenuButton.rect);
         }
 
         else if (gameState == PAUSE_1) {
