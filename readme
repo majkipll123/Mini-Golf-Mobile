@@ -1,1 +1,53 @@
-readmetest
+Mini Golf Mobile Game
+Introduction
+
+Welcome to the Mini Golf Mobile Game! This is a simple mini-golf game implemented in C++ using the SDL (Simple DirectMedia Layer) library. The game features basic graphics, text rendering, and interactions.
+Prerequisites
+
+Before running the game, make sure you have the following dependencies installed:
+
+    SDL2
+    SDL2_gfxPrimitives
+    SDL2_ttf
+    SQLite3
+
+You can install these libraries on Unix-like systems using the package manager. For example, on Ubuntu, you can run:
+
+bash
+
+sudo apt-get install libsdl2-dev libsdl2-gfx-dev libsdl2-ttf-dev libsqlite3-dev
+
+For other operating systems or package managers, please refer to the respective documentation.
+Build and Run
+
+To build the Mini Golf Mobile Game, follow these steps:
+
+    Clone the repository:
+
+    bash
+
+git clone https://github.com/your-username/mini-golf-mobile-game.git
+cd mini-golf-mobile-game
+
+Build the project:
+
+bash
+
+g++ main.cpp -o mini_golf -lSDL2 -lSDL2_gfx -lSDL2_ttf -lsqlite3
+
+Note: Make sure to replace your-username with your actual GitHub username.
+
+Run the game:
+
+bash
+
+    ./mini_golf
+
+Controls
+
+    Use mouse actions for interactions.
+    Additional controls (if any) can be found within the game interface.
+
+Contributing
+
+If you'd like to contribute to this project, please fork the repository and create a pull request. Feel free to open issues for bug reports, feature requests, or general feedback.
