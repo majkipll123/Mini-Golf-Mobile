@@ -2,6 +2,7 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_ttf.h>
 //#include <SDL_mixer.h>
+#include <vector>
 #include <cmath>
 #include <iostream>
 #include <unistd.h>
@@ -35,7 +36,8 @@ enum GameState {
     FINAL_SCREEN3,
     FINAL_SCREEN4,
     FINAL_SCREEN5,
-    FINAL_SCREEN6// New game state for the pause screen
+    FINAL_SCREEN6,
+    INSTRUCTUINS// New game state for the pause screen
 };
 
 // Define the button structure
@@ -197,7 +199,37 @@ void drawFilledCircle(SDL_Renderer* renderer, int centerX, int centerY, int radi
 }
 
 
+SDL_Surface* renderTextLines(TTF_Font* font, const std::vector<std::string>& textLines) {
+    int totalHeight = 0;
+    for (const std::string& line : textLines) {
+        totalHeight += TTF_FontHeight(font);
+    }
 
+    SDL_Surface* textSurface = SDL_CreateRGBSurface(0, 600, totalHeight, 32, 0, 0, 0, 0);
+
+    if (!textSurface) {
+        std::cerr << "Failed to create text surface: " << SDL_GetError() << std::endl;
+        return nullptr;
+    }
+
+    SDL_Rect textRect = {0, 0, 0, 0};
+
+    for (const std::string& line : textLines) {
+        SDL_Surface* lineSurface = TTF_RenderText_Solid(font, line.c_str(), {255, 255, 255});
+
+        if (!lineSurface) {
+            std::cerr << "Failed to render text surface: " << TTF_GetError() << std::endl;
+            SDL_FreeSurface(textSurface);
+            return nullptr;
+        }
+
+        SDL_BlitSurface(lineSurface, nullptr, textSurface, &textRect);
+        textRect.y += TTF_FontHeight(font);
+        SDL_FreeSurface(lineSurface);
+    }
+
+    return textSurface;
+}
 int main(int argc, char* args[]) {
 
     sqlite3* db;
@@ -515,8 +547,13 @@ int main(int argc, char* args[]) {
                                 //usleep(1);
                                 // Initialize the game state for level 1 here
                             }
+                            else if (i == 1)
+                            {
+                                gameState = INSTRUCTUINS;
+                                
+                            }
                             else if (i == 2) {
-
+                                
                                 quit = true;
                             }
                             else if (i == 3)
@@ -629,6 +666,17 @@ int main(int argc, char* args[]) {
                         // Add any additional logic for transitioning back to MENU here
                     }
                     else if (mainMenuButton.isHovered &&(gameState == FINAL_SCREEN4 || gameState == PAUSE_4)){
+                        // Transition back to MENU
+                        gameState = MENU;
+                        ball.setAcceleration(0, 0, 0.0);
+                        ball.setVelocity(0, 0, 0.0);
+                        ball.setPosition(SCREEN_WIDTH-25, SCREEN_HEIGHT - 50);
+                        ball.resetHitCount();
+                       // ball.resetHitCount();
+
+                        // Add any additional logic for transitioning back to MENU here
+                    }
+                    else if (mainMenuButton.isHovered &&(gameState == INSTRUCTUINS)){
                         // Transition back to MENU
                         gameState = MENU;
                         ball.setAcceleration(0, 0, 0.0);
@@ -1270,6 +1318,35 @@ int main(int argc, char* args[]) {
             // Render the final screen
             std::string endText = "Shots: " + std::to_string(ball.getHitCount())+" Your best result: " + std::to_string(getBestShots(db,6));
             SDL_Surface* endSurface = TTF_RenderText_Solid(font, endText.c_str(), {255, 255, 255});
+            SDL_Texture* endTexture = SDL_CreateTextureFromSurface(renderer, endSurface);
+            SDL_Rect endRect = {(SCREEN_WIDTH - endSurface->w) / 2, (SCREEN_HEIGHT - endSurface->h) / 2, endSurface->w, endSurface->h};
+            SDL_RenderCopy(renderer, endTexture, NULL, &endRect);
+            SDL_FreeSurface(endSurface);
+            SDL_DestroyTexture(endTexture);
+
+            // Add a "Back to Menu" button
+            SDL_SetRenderDrawColor(renderer, mainMenuButton.isHovered ? 255 : 0, 0, 0, 255);
+            SDL_RenderFillRect(renderer, &mainMenuButton.rect);
+            SDL_RenderCopy(renderer, mainMenuButton.textTexture, NULL, &mainMenuButton.rect);
+        }
+        else if (gameState == INSTRUCTUINS) {
+            
+            // Render the final screen  to \n \n  \n so try to collect them as they will help you to move around the map";
+            std::vector<std::string> textLines = {
+                "Welcome to the mini golf mobile!",
+                "This is my first project game in C++",
+                "For now, there are 6 levels", 
+                "in the practice offline tab",
+                "The movement is simple, just drag and shoot!",
+                "There are yellow boosters on the map",
+                "So try to collect them! Have Fun!"
+                "also there is a reset all records button",
+                "watch out with that!"
+            };
+
+            // Render text lines onto a surface
+            SDL_Surface* endSurface = renderTextLines(font, textLines);
+
             SDL_Texture* endTexture = SDL_CreateTextureFromSurface(renderer, endSurface);
             SDL_Rect endRect = {(SCREEN_WIDTH - endSurface->w) / 2, (SCREEN_HEIGHT - endSurface->h) / 2, endSurface->w, endSurface->h};
             SDL_RenderCopy(renderer, endTexture, NULL, &endRect);
