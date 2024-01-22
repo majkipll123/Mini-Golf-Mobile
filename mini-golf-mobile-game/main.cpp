@@ -266,8 +266,8 @@ int main(int argc, char* args[]) {
     // Initialize TTF
     TTF_Init();
 
-    // Create a font
-    TTF_Font* font = TTF_OpenFont("/home/majkipll123/Documents/Github/Mini-Golf-Mobile/testy/Beautiful Bride.otf", 54);
+    // Create a font your font path
+    TTF_Font* font = TTF_OpenFont("/home/majkipll123/Documents/Github/Mini-Golf-Mobile/mini-golf-mobile-game/Beautiful Bride.otf", 54);
 
     // Create the buttons
     const int buttonWidth = 400;
@@ -467,7 +467,7 @@ int main(int argc, char* args[]) {
     Wall wall12((SCREEN_WIDTH-25)/2,SCREEN_HEIGHT/5,50,SCREEN_HEIGHT/2);
 
     //lvl6
-
+    
 
     Wall empty(0,0,0,0);
     
