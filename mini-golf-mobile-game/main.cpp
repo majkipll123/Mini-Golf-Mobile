@@ -282,7 +282,7 @@ int main(int argc, char* args[]) {
         if ( i==0 )
             buttons[0].textSurface = TTF_RenderText_Solid(font, "Practise offline", {255, 255, 255});
         else if ( i==1 )
-            buttons[1].textSurface = TTF_RenderText_Solid(font, "Options", {255, 255, 255});
+            buttons[1].textSurface = TTF_RenderText_Solid(font, "Instructions", {255, 255, 255});
         else if ( i==2 )
             buttons[2].textSurface = TTF_RenderText_Solid(font, "Quit", {255, 255, 255});
         else if ( i==3 )
@@ -467,8 +467,12 @@ int main(int argc, char* args[]) {
     Wall wall12((SCREEN_WIDTH-25)/2,SCREEN_HEIGHT/5,50,SCREEN_HEIGHT/2);
 
     //lvl6
-    
-
+    Wall wall13(SCREEN_WIDTH/6,850,100+(SCREEN_WIDTH/2),50);
+    Wall wall14(0,450,SCREEN_WIDTH/3,50);
+    Wall wall15(SCREEN_WIDTH/3,350,SCREEN_WIDTH,50);
+    Wall wall16(SCREEN_WIDTH/3,350,SCREEN_WIDTH,50);
+    Wall wall17(SCREEN_WIDTH/3,450,SCREEN_WIDTH,50);
+    Wall wall18(SCREEN_WIDTH/3,650,SCREEN_WIDTH,50);
     Wall empty(0,0,0,0);
     
     while (!quit) {
@@ -1040,8 +1044,8 @@ int main(int argc, char* args[]) {
             SDL_RenderCopy(renderer, pause3MenuButton.textTexture, NULL, &pause3MenuButton.rect);
         }
         else if (gameState == LEVEL_5) {
-                hole.x = SCREEN_WIDTH*3/4 ;/* X-coordinate of the hole */;
-                hole.y = (SCREEN_HEIGHT+20)/6 ;/* Y-coordinate of the hole */;
+                hole.x = (SCREEN_WIDTH*3/4)-10 ;/* X-coordinate of the hole */;
+                hole.y = (SCREEN_HEIGHT+50)/6 ;/* Y-coordinate of the hole */;
                 hole.radius = 15 ;
             //gameState = LEVEL_1;
             //ball.resetHitCount();
@@ -1121,14 +1125,15 @@ int main(int argc, char* args[]) {
             SDL_RenderCopy(renderer, pause4MenuButton.textTexture, NULL, &pause4MenuButton.rect);
         }
         else if (gameState == LEVEL_6) {
-                hole.x = SCREEN_WIDTH/5 ;/* X-coordinate of the hole */;
-                hole.y = SCREEN_HEIGHT-50 ;/* Y-coordinate of the hole */;
+                hole.x = SCREEN_WIDTH/2 ;/* X-coordinate of the hole */;
+                hole.y =  100;/* Y-coordinate of the hole */;
                 hole.radius = 15 ;
             //gameState = LEVEL_1;
             //ball.resetHitCount();
             //ball.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT - 50);
 
-            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall3);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall13);
+            ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall14);
             ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall4);
             ball.handleCollision(SCREEN_WIDTH, SCREEN_HEIGHT, wall5);
             if (isCollision(ball.getX(), ball.getY(), ball.getRadius(), hole)) {
@@ -1143,7 +1148,8 @@ int main(int argc, char* args[]) {
 
             // Draw the hole
             filledCircleColor(renderer, hole.x, hole.y, hole.radius, 0xFF0000FF);
-            wall3.draw(renderer);
+            wall13.draw(renderer);
+            wall14.draw(renderer);
             wall4.draw(renderer);
             wall5.draw(renderer);
             // Draw the ball after the hole to ensure it's not covered
@@ -1339,7 +1345,7 @@ int main(int argc, char* args[]) {
                 "in the practice offline tab",
                 "The movement is simple, just drag and shoot!",
                 "There are yellow boosters on the map",
-                "So try to collect them! Have Fun!"
+                "So try to collect them! Have Fun!",
                 "also there is a reset all records button",
                 "watch out with that!"
             };
