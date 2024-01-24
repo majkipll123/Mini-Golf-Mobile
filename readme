@@ -33,7 +33,7 @@ Build the project:
 
 bash
 
-g++ main.cpp -o mini_golf -lSDL2 -lSDL2_gfx -lSDL2_ttf -lsqlite3
+g++ main.cpp Ball.cpp  Booster.cpp Sand.cpp -o mini_golf -lSDL2 -lSDL2_gfx -lSDL2_ttf -lsqlite3
 
 Note: Make sure to replace your-username with your actual GitHub username.
 
